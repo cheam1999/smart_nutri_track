@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "630519322035",
+    "project_id": "smartnutritrack",
+    "storage_bucket": "smartnutritrack.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630519322035:android:fb00794c31d9a1042327c6",
+        "android_client_info": {
+          "package_name": "com.example.smart_nutri_track"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630519322035-dvtp4fkqsrv24io6ov461hilv920se2f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw5foy98EWeasJndDhE6HoqYqBbVq6KOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630519322035-dvtp4fkqsrv24io6ov461hilv920se2f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
