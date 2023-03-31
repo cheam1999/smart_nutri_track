@@ -3,11 +3,18 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_nutri_track/controller/barcode_products_controller.dart';
+import 'package:smart_nutri_track/screen/barcode_details.dart';
+import 'package:smart_nutri_track/screen/barcode_scanning.dart';
+import 'package:smart_nutri_track/screen/init.dart';
 
+import '../constant/showLoadingDialog.dart';
 import '../main.dart';
+import 'painters/barcode_detector_painter.dart';
 
 enum ScreenMode { liveFeed, gallery }
 
@@ -15,17 +22,11 @@ class CameraView extends StatefulWidget {
   CameraView(
       {Key? key,
       required this.title,
-      required this.customPaint,
-      this.text,
-      required this.onImage,
       this.onScreenModeChanged,
       this.initialDirection = CameraLensDirection.back})
       : super(key: key);
 
   final String title;
-  final CustomPaint? customPaint;
-  final String? text;
-  final Function(InputImage inputImage) onImage;
   final Function(ScreenMode mode)? onScreenModeChanged;
   final CameraLensDirection initialDirection;
 
@@ -43,6 +44,11 @@ class _CameraViewState extends State<CameraView> {
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
   final bool _allowPicker = true;
   bool _changingCameraLens = false;
+
+  final BarcodeScanner _barcodeScanner = BarcodeScanner();
+  bool _canProcess = true;
+  bool _isBusy = false;
+  CustomPaint? _customPaint;
 
   @override
   void initState() {
@@ -80,6 +86,8 @@ class _CameraViewState extends State<CameraView> {
   void dispose() {
     _stopLiveFeed();
     super.dispose();
+    _canProcess = false;
+    _barcodeScanner.close();
   }
 
   @override
@@ -104,93 +112,28 @@ class _CameraViewState extends State<CameraView> {
             ),
         ],
       ),
-      body: _body(),
-      floatingActionButton: _floatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      body: _galleryBody(),
+      // floatingActionButton: _floatingActionButton(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget? _floatingActionButton() {
-    if (_mode == ScreenMode.gallery) return null;
-    if (cameras.length == 1) return null;
-    return SizedBox(
-        height: 70.0,
-        width: 70.0,
-        child: FloatingActionButton(
-          onPressed: _switchLiveCamera,
-          child: Icon(
-            Platform.isIOS
-                ? Icons.flip_camera_ios_outlined
-                : Icons.flip_camera_android_outlined,
-            size: 40,
-          ),
-        ));
-  }
-
-  Widget _body() {
-    Widget body;
-    if (_mode == ScreenMode.liveFeed) {
-      body = _liveFeedBody();
-    } else {
-      body = _galleryBody();
-    }
-    return body;
-  }
-
-  Widget _liveFeedBody() {
-    if (_controller?.value.isInitialized == false) {
-      return Container();
-    }
-
-    final size = MediaQuery.of(context).size;
-    // calculate scale depending on screen and camera ratios
-    // this is actually size.aspectRatio / (1 / camera.aspectRatio)
-    // because camera preview size is received as landscape
-    // but we're calculating for portrait orientation
-    var scale = size.aspectRatio * _controller!.value.aspectRatio;
-
-    // to prevent scaling down, invert the value
-    if (scale < 1) scale = 1 / scale;
-
-    return Container(
-      color: Colors.black,
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Transform.scale(
-            scale: scale,
-            child: Center(
-              child: _changingCameraLens
-                  ? Center(
-                      child: const Text('Changing camera lens'),
-                    )
-                  : CameraPreview(_controller!),
-            ),
-          ),
-          if (widget.customPaint != null) widget.customPaint!,
-          Positioned(
-            bottom: 100,
-            left: 50,
-            right: 50,
-            child: Slider(
-              value: zoomLevel,
-              min: minZoomLevel,
-              max: maxZoomLevel,
-              onChanged: (newSliderValue) {
-                setState(() {
-                  zoomLevel = newSliderValue;
-                  _controller!.setZoomLevel(zoomLevel);
-                });
-              },
-              divisions: (maxZoomLevel - 1).toInt() < 1
-                  ? null
-                  : (maxZoomLevel - 1).toInt(),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget? _floatingActionButton() {
+  //   if (_mode == ScreenMode.gallery) return null;
+  //   if (cameras.length == 1) return null;
+  //   return SizedBox(
+  //       height: 70.0,
+  //       width: 70.0,
+  //       child: FloatingActionButton(
+  //         onPressed: _switchLiveCamera,
+  //         child: Icon(
+  //           Platform.isIOS
+  //               ? Icons.flip_camera_ios_outlined
+  //               : Icons.flip_camera_android_outlined,
+  //           size: 40,
+  //         ),
+  //       ));
+  // }
 
   Widget _galleryBody() {
     return ListView(shrinkWrap: true, children: [
@@ -202,7 +145,7 @@ class _CameraViewState extends State<CameraView> {
                 fit: StackFit.expand,
                 children: <Widget>[
                   Image.file(_image!),
-                  if (widget.customPaint != null) widget.customPaint!,
+                  if (_customPaint != null) _customPaint!,
                 ],
               ),
             )
@@ -221,15 +164,23 @@ class _CameraViewState extends State<CameraView> {
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
           child: Text('Take a picture'),
-          onPressed: () => _getImage(ImageSource.camera),
+          onPressed: () {
+            _getImage(ImageSource.camera);
+
+            // await Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => BarcodeDetailScreen(code: widget.code),
+            //     ));
+          },
         ),
       ),
-      if (_image != null)
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-              '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
-        ),
+      // if (_image != null)
+      //   Padding(
+      //     padding: const EdgeInsets.all(16.0),
+      //     child: Text(
+      //         '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
+      //   ),
     ]);
   }
 
@@ -308,7 +259,8 @@ class _CameraViewState extends State<CameraView> {
     });
     _path = path;
     final inputImage = InputImage.fromFilePath(path);
-    widget.onImage(inputImage);
+
+    processImage(inputImage);
   }
 
   Future _processCameraImage(CameraImage image) async {
@@ -350,6 +302,50 @@ class _CameraViewState extends State<CameraView> {
     final inputImage =
         InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
-    widget.onImage(inputImage);
+    processImage(inputImage);
+  }
+
+  Future<void> processImage(InputImage inputImage) async {
+    if (!_canProcess) return;
+    if (_isBusy) return;
+    _isBusy = true;
+
+    final barcodes = await _barcodeScanner.processImage(inputImage);
+    if (inputImage.inputImageData?.size != null &&
+        inputImage.inputImageData?.imageRotation != null) {
+      final painter = BarcodeDetectorPainter(
+          barcodes,
+          inputImage.inputImageData!.size,
+          inputImage.inputImageData!.imageRotation);
+      _customPaint = CustomPaint(painter: painter);
+    } else {
+      // TODO if no barcode found
+
+      // var text = 'Barcodes found: ${barcodes.length}\n\n';
+      String text = 'Barcodes found: ${barcodes.length}\n\n';
+      String? code;
+      for (final barcode in barcodes) {
+        text += 'Barcode: ${barcode.rawValue}\n\n';
+        code = barcode.rawValue!;
+      }
+
+      if (code == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text('NO BARCODE DETECTED! PLEASE TRY AGAIN!')));
+      } else {
+        showLoadingDialog(context: context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BarcodeDetailScreen(
+                code: code,
+              ),
+            ));
+      }
+
+      // TODO: set _customPaint to draw boundingRect on top of image
+      _customPaint = null;
+    }
+    _isBusy = false;
   }
 }

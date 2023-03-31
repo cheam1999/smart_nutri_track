@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../size_config.dart';
 
 class ColourConstant {
   ColourConstant._(); // This is to prevent anyone from instantiating this object
@@ -17,4 +18,11 @@ class ColourConstant {
   static const Color kDarkColor = Color(0xFF272443);
   static const Color kWhiteColor = Color(0xFFFFFFFF);
   static const Color kGreyColor = Color(0xFF979797);
+
+  static double h1 = getProportionateScreenHeight(25);
+  static double h2 = getProportionateScreenHeight(20);
+  static double h3 = getProportionateScreenHeight(18);
+  static double h4 = getProportionateScreenHeight(16);
+  static double h5 = getProportionateScreenHeight(14);
+  static double h6 = getProportionateScreenHeight(12);
 }
