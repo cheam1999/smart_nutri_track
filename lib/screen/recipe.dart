@@ -15,7 +15,14 @@ class RecipeScreen extends HookConsumerWidget {
     return Scaffold(
       backgroundColor: ColourConstant.kBlueColor,
       extendBodyBehindAppBar: true,
-      body: const Text('recipe'),
+      body: Center(
+        child: Text(
+          "Under Construction",
+          style: TextStyle(
+            fontSize: 14,
+          ),
+        ),
+      ),
     );
   }
 }

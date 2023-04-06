@@ -24,6 +24,7 @@ class AuthController extends StateNotifier<User> {
 
     // Check Login Status
     bool _isLogin = await UserSharedPreferences.getLoginStatus() ?? false;
+    print("islogin  $_isLogin");
 
     if (_isLogin) {
       String? _accessToken =
@@ -80,6 +81,7 @@ class AuthController extends StateNotifier<User> {
 
       state = _user;
       print(state);
+      print(state.accessToken);
 
       UserSharedPreferences.setLoginStatus(true);
       UserSharedPreferences.setAccessToken(state.accessToken!);

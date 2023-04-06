@@ -50,14 +50,20 @@ InputDecorationTheme inputDecorationTheme() {
 
 TextTheme textTheme() {
   return TextTheme(
-      bodySmall: TextStyle(
+    bodySmall: TextStyle(
+      color: ColourConstant.kDarkColor,
+      fontSize: ColourConstant.h5,
+    ),
+    bodyMedium: TextStyle(
+        fontSize: ColourConstant.h4,
         color: ColourConstant.kDarkColor,
-        fontSize: ColourConstant.h5,
-      ),
-      bodyMedium: TextStyle(
-        color: ColourConstant.kDarkColor,
-        fontSize: ColourConstant.h3,
-      ));
+        fontWeight: FontWeight.bold),
+    bodyLarge: TextStyle(
+      color: ColourConstant.kBlueColor,
+      fontSize: ColourConstant.h1,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 }
 
 AppBarTheme appBarTheme() {

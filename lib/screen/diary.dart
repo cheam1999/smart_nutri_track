@@ -3,12 +3,17 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/component/default_button.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:http/http.dart' as http;
+import 'package:smart_nutri_track/screen/diary_daily.dart';
+import 'package:smart_nutri_track/screen/diary_weekly.dart';
 
+import '../component/default_tabView.dart';
 import '../models/custom_exception.dart';
+import '../size_config.dart';
 
 class DiaryScreen extends HookConsumerWidget {
   static String routeName = "/diary";
@@ -18,66 +23,108 @@ class DiaryScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-        backgroundColor: ColourConstant.kBlueColor,
+    TabController _tabController = useTabController(
+      initialLength: 2,
+      initialIndex: 0,
+    );
+
+    return Container(
+      // decoration: BoxDecoration(gradient: UgekColors.kPrimaryGradientColor),
+      child: Scaffold(
+        backgroundColor: Colors.transparent.withOpacity(0),
         extendBodyBehindAppBar: true,
-        body: SafeArea(
-          child: ElevatedButton(
-            onPressed: () async {
-              bool diabetes = false;
-
-              diabetes = await retrieveDiabetesPrediction();
-
-              if (diabetes) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text(
-                        'You suspect gestational diabetes! We suggest you have a medical check-up.')));
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text(
-                        'Hooray! You are free from gestational diabetes.')));
-              }
-            },
-            child: Text(
-              'Prediction',
+        appBar: AppBar(
+          title: Text("Diary"),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(
+              getProportionateScreenHeight(50),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.5),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20)),
+              ),
+              child: TabBar(
+                labelColor: Colors.white,
+                unselectedLabelColor: ColourConstant.kGreyColor,
+                labelStyle: TextStyle(
+                  fontSize: getProportionateScreenWidth(13),
+                  fontWeight: FontWeight.bold,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontSize: getProportionateScreenWidth(13),
+                ),
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
+                    color: ColourConstant.kDarkColor),
+                automaticIndicatorColorAdjustment: true,
+                // indicatorSize: TabBarIndicatorSize.label,
+                controller: _tabController,
+                tabs: <Widget>[
+                  Tab(
+                    text: 'Daily',
+                  ),
+                  Tab(
+                    text: 'Weekly',
+                  ),
+                ],
+              ),
             ),
           ),
-        ));
-  }
+        ),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            DefaultTabBarView(
+              childWidget: DailyDiary(),
+            ),
+            DefaultTabBarView(
+              childWidget: WeeklyDiary(),
+            ),
+          ],
+        ),
+      ),
+    );
+    // return Scaffold(
+    //     backgroundColor: ColourConstant.kBlueColor,
+    //     extendBodyBehindAppBar: true,
+    //     appBar: AppBar(
+    //       title: Text(
+    //         "Diary",
+    //         style: TextStyle(
+    //           color: ColourConstant.kWhiteColor,
+    //           fontSize: 20,
+    //           fontWeight: FontWeight.bold,
+    //         ),
+    //       ),
+    //       elevation: 0,
+    //     ),
 
-  @override
-  Future<bool> retrieveDiabetesPrediction() async {
-    var url =
-        Uri.parse('https://snt-diabetes-api.herokuapp.com/diabetes_prediction');
+    // body: SafeArea(
+    //   child: ElevatedButton(
+    //     onPressed: () async {
+    //       bool diabetes = false;
 
-    try {
-      var response = await http.post(
-        url,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
-          'Carbohydrate_intake': 70.2,
-        }),
-      );
+    //       diabetes = await retrieveDiabetesPrediction();
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      var responseBody = response.body;
-      if (response.statusCode == 200) {
-        if (responseBody == '0') {
-          return false;
-        } else {
-          return true;
-        }
-      } else {
-        throw CustomException(
-            message: 'Failed to predict gestational diabetes!');
-      }
-    } catch (e) {
-      return Future.error(e);
-    }
+    //       if (diabetes) {
+    //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //             content: const Text(
+    //                 'You suspect gestational diabetes! We suggest you have a medical check-up.')));
+    //       } else {
+    //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //             content: const Text(
+    //                 'Hooray! You are free from gestational diabetes.')));
+    //       }
+    //     },
+    //     child: Text(
+    //       'Prediction',
+    //     ),
+    //   ),
+    // ));
   }
 }

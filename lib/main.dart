@@ -8,6 +8,8 @@ import 'package:smart_nutri_track/screen/auth/sign_in.dart';
 import 'package:smart_nutri_track/screen/init.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/screen/init.dart';
+import 'package:smart_nutri_track/screen/start.dart';
+import 'package:smart_nutri_track/utilities/user_shared_preferences.dart';
 
 import 'env.dart';
 
@@ -18,13 +20,14 @@ Future<void> main() async {
   cameras = await availableCameras();
 
   var url = Platform.isAndroid
-      ? 'http://192.168.0.102:8000/api/'
+      // ? 'http://192.168.188.1:8030/api/'
+      ? 'http://10.207.201.74:8030/api/'
       : 'http://10.0.2.2:8000/api/';
   // : 'http://localhost/smartNutriTrack_api/';
 
   BuildEnvironment.init(flavor: BuildFlavor.local, baseUrl: url);
   assert(env != null);
-
+  await UserSharedPreferences.init();
   runApp(ProviderScope(child: MyApp()));
 }
 

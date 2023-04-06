@@ -87,7 +87,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                                 getProportionateScreenHeight(
                                                     20)),
                                         Text(
-                                          snapshot.data[index].food_name,
+                                          snapshot.data.food_name,
                                           style: TextStyle(
                                             fontSize: ColourConstant.h1,
                                             fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                               ),
                                             ),
                                             Text(
-                                              "${snapshot.data[index].food_serving_size}",
+                                              "${snapshot.data.food_serving_size}",
                                               style: TextStyle(
                                                 fontSize: ColourConstant.h4,
                                                 color:
@@ -207,7 +207,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                           children: [
                                             Text('Carbohydrates'),
                                             Text(
-                                              '${snapshot.data[index].carbohydrates_100g} g',
+                                              '${snapshot.data.carbohydrates_100g} g',
                                             )
                                           ],
                                         ),
@@ -221,7 +221,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                           children: [
                                             Text('Protein'),
                                             Text(
-                                              '${snapshot.data[index].proteins_100g} g',
+                                              '${snapshot.data.proteins_100g} g',
                                             )
                                           ],
                                         ),
@@ -235,7 +235,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                           children: [
                                             Text('Sodium'),
                                             Text(
-                                              '${snapshot.data[index].sodium_100g} g',
+                                              '${snapshot.data.sodium_100g} g',
                                             )
                                           ],
                                         ),
@@ -249,7 +249,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                           children: [
                                             Text('Calcium'),
                                             Text(
-                                              '${snapshot.data[index].calcium_100g} g',
+                                              '${snapshot.data.calcium_100g} g',
                                             )
                                           ],
                                         ),
@@ -289,7 +289,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
   }
 
   @override
-  Future<List<Barcode_products>> retrieveBarcodeProducts(String code) async {
+  Future<Barcode_products> retrieveBarcodeProducts(String code) async {
     // final int id = _read(authControllerProvider).id!;
     // String? _accesToken = await UserSharedPreferences.getAccessToken() ?? null;
     final String apiRoute = 'get_barcode_products/$code';
@@ -311,15 +311,27 @@ class BarcodeDetailScreen extends HookConsumerWidget {
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-      var responseBody = response.body;
+      var responseBody = json.decode(response.body);
       if (response.statusCode == 200) {
-        // return Barcode_products.fromJson(response.body);
-        final results =
-            List<Map<String, dynamic>>.from(json.decode(responseBody));
+        // // return Barcode_products.fromJson(response.body);
+        // final results =
+        //     List<Map<String, dynamic>>.from(json.decode(responseBody));
 
-        List<Barcode_products> items = results
-            .map((item) => Barcode_products.fromMap(item))
-            .toList(growable: false);
+        // List<Barcode_products> items = results
+        //     .map((item) => Barcode_products.fromMap(item))
+        //     .toList(growable: false);
+
+        Barcode_products items = Barcode_products(
+          food_code: responseBody['food_code'],
+          food_name: responseBody['food_name'],
+          food_quantity: responseBody['food_quantity'],
+          food_serving_size: responseBody['food_serving_size'],
+          energy_kcal_100g: responseBody['energy_kcal_100g'],
+          carbohydrates_100g: responseBody['carbohydrates_100g'],
+          proteins_100g: responseBody['proteins_100g'],
+          sodium_100g: responseBody['sodium_100g'],
+          calcium_100g: responseBody['calcium_100g'],
+        );
 
         return items;
       } else {
