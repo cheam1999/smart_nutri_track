@@ -39,6 +39,7 @@ dependencies:
   email_validator: ^2.1.17
   intl: ^0.18.0
   percent_indicator: ^4.2.3
+  font_awesome_flutter: ^10.4.0
 
 
 dev_dependencies:

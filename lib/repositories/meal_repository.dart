@@ -11,6 +11,11 @@ import '../utilities/user_shared_preferences.dart';
 
 abstract class BaseMealRepository {
   Future<void> retrieveMeals();
+  Future<bool> saveMeals({
+    required String meal,
+    required int size,
+    required int food_id,
+  });
   //  Future<List<Food_intakes>> retrieveMeals();
 }
 
@@ -49,6 +54,53 @@ class MealRepository implements BaseMealRepository {
             List<Map<String, dynamic>>.from(json.decode(responseBody));
 
         print(responseBody);
+      } else {
+        throw CustomException(message: 'Failed to retrieve product detail!');
+      }
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  @override
+  Future<bool> saveMeals(
+    {
+    required String meal,
+    required int size,
+    required int food_id,
+  }
+  ) async {
+    // final int id = _read(authControllerProvider).id!;
+    String? _accesToken = await UserSharedPreferences.getAccessToken() ?? null;
+    final String apiRoute = 'save_meal';
+    var url = Uri.parse(env!.baseUrl + apiRoute);
+
+    print('Requesting to $url');
+
+    try {
+      var response = await http.post(
+        url,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $_accesToken',
+        },
+        body: jsonEncode(
+            {'meal': meal, 'intake_serving_size': size, 'food_id': food_id}),
+      );
+
+      print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
+
+      var responseBody = response.body;
+      if (response.statusCode == 200) {
+        print(responseBody);
+
+        if (responseBody == '0')
+          return false;
+        else
+          return true;
+
       } else {
         throw CustomException(message: 'Failed to retrieve product detail!');
       }

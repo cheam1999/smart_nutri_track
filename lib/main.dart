@@ -20,9 +20,10 @@ Future<void> main() async {
   cameras = await availableCameras();
 
   var url = Platform.isAndroid
-      // ? 'http://192.168.188.1:8030/api/'
       ? 'http://10.207.201.74:8030/api/'
-      : 'http://10.0.2.2:8000/api/';
+      // ? 'http://10.213.22.46:8030/api/'
+      // ? 'http://10.213.21.24:8030/api/'
+      : 'http://10.0.2.2:8030/api/';
   // : 'http://localhost/smartNutriTrack_api/';
 
   BuildEnvironment.init(flavor: BuildFlavor.local, baseUrl: url);

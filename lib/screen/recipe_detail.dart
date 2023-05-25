@@ -11,102 +11,105 @@ import 'package:smart_nutri_track/size_config.dart';
 import 'package:smart_nutri_track/theme.dart';
 import 'package:smart_nutri_track/utilities/user_shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../component/normal_text.dart';
 import '../env.dart';
 import '../models/custom_exception.dart';
 import '../models/food_intakes.dart';
+import '../models/recipe_model.dart';
 
-class HomeScreen extends HookConsumerWidget {
-  static String routeName = "/home";
-  const HomeScreen({
-    Key? key,
-  }) : super(key: key);
+class RecipeDetailPage extends HookConsumerWidget {
+  static String routeName = "/recipe_detail";
+  // final String title;
+  final Recipe recipe;
+
+  const RecipeDetailPage({Key? key, required this.recipe})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: Color(0xFFA9D4EF),
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        // title: Text(
-        //   " Home",
-        //   style: TextStyle(
-        //     color: ColourConstant.kWhiteColor,
-        //     fontSize: 20,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
         backgroundColor: ColourConstant.kBlueColor,
-        elevation: 0,
-      ),
-      body: Container(
-        child: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
-          return RefreshIndicator(
-            displacement: 10,
-            onRefresh: () async {
-              // await ref
-              //     .read(authControllerProvider.notifier)
-              //     .getFoodSavedAndWaste();
-            },
-            child: Container(
-                child: FutureBuilder(
-                    future: retrieveMeals(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: Text(
-                            "",
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return SingleChildScrollView(
-                            child: RefreshIndicator(
-                                onRefresh: () async {},
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Your meal today",
-                                      style: TextStyle(
-                                        fontSize: ColourConstant.h1,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Container(
-                                        decoration: BoxDecoration(
-                                          color: ColourConstant.kWhiteColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                        margin: EdgeInsets.only(top: 20),
-                                        padding: EdgeInsets.all(30),
-                                        child: //Text('data')
-                                            BuildingList(list: snapshot.data)),
-                                  ],
-                                )));
-                      }
-                    })),
-          );
-        })),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: "Add Meal",
-        backgroundColor: ColourConstant.kButtonColor,
-        elevation: 5.0,
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => BarcodeScanningScreen()),
-          );
-        },
-        child: Icon(
-          Icons.add,
-          size: 20,
-          color: ColourConstant.kWhiteColor,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          // title: Text(
+          //   " Home",
+          //   style: TextStyle(
+          //     color: ColourConstant.kWhiteColor,
+          //     fontSize: 20,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+          backgroundColor: ColourConstant.kBlueColor,
+          elevation: 0,
         ),
-      ),
-    );
+        body: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
+          return Column(
+            children: [
+              Container(
+                child: Expanded(child: SingleChildScrollView(
+                  physics: ClampingScrollPhysics(),
+                  child: Column(
+                    children: [
+                       Container(
+                        padding: EdgeInsets.fromLTRB(
+                          getProportionateScreenWidth(20),
+                          getProportionateScreenHeight(10),
+                          getProportionateScreenWidth(20),
+                          getProportionateScreenHeight(20),
+                        ),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                           
+                            SizedBox(
+                              height: getProportionateScreenHeight(8),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: NormalText(
+                                    text: "${recipe.recipe_name}",
+                                    textColor: Colors.black,
+                                    fontSize: 20,
+                                    align: TextAlign.center,
+                                    isBold: true,
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(8),
+                            ),
+                            Text(
+                              'Ingredients',
+                              
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(5),
+                            ),
+                            NormalText(text: "${recipe.recipe_ingredients}"),
+                            SizedBox(
+                              height: getProportionateScreenHeight(10),
+                            ),
+                           Text(
+                               'Instructions',
+                  
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(5),
+                            ),
+                            NormalText(text: "${recipe.recipe_instructions}"),
+                     ] ),
+                  )],
+                  ),
+                )),
+              )
+            ],
+          );
+        })));
   }
 
   Future<List<Food_intakes>> retrieveMeals() async {
