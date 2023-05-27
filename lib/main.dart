@@ -20,9 +20,9 @@ Future<void> main() async {
   cameras = await availableCameras();
 
   var url = Platform.isAndroid
-      ? 'http://10.207.201.74:8030/api/'
+      // ? 'http://10.207.201.74:8030/api/'
       // ? 'http://10.213.22.46:8030/api/'
-      // ? 'http://10.213.21.24:8030/api/'
+      ? 'http://10.213.20.30:8030/api/'
       : 'http://10.0.2.2:8030/api/';
   // : 'http://localhost/smartNutriTrack_api/';
 

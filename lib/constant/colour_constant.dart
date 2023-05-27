@@ -15,9 +15,15 @@ class ColourConstant {
   static const Color kButtonColor = Color(0xFF52ABE1);
   //static const Color kBackgroundColor = Color(0xFFFBF2EC);
   static const Color kBlueColor = Color(0xFF52ABE1);
+  static const Color kLightBlueColor = Color(0xFFA9D4EF);
   static const Color kDarkColor = Color(0xFF272443);
   static const Color kWhiteColor = Color(0xFFFFFFFF);
   static const Color kGreyColor = Color(0xFF979797);
+  static const LinearGradient kPrimaryGradientColor = const LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.topRight,
+    colors: [Color(0xFF0F1BE8), Color(0xFF3DAEF7)],
+  );
 
   static double h1 = getProportionateScreenHeight(25);
   static double h2 = getProportionateScreenHeight(20);

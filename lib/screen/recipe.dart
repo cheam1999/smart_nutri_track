@@ -8,11 +8,13 @@ import 'package:smart_nutri_track/component/change_recipe.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:smart_nutri_track/controller/recipe/lunch_recipe_controller.dart';
 import 'package:smart_nutri_track/controller/recipe_controller.dart';
+import 'package:smart_nutri_track/repositories/ur_repository.dart';
 import 'package:smart_nutri_track/screen/recipe_detail.dart';
 import 'package:smart_nutri_track/theme.dart';
 
 import '../component/touchable_feedback.dart';
 import '../controller/recipe/breakfast_recipe_controller.dart';
+import '../controller/recipe/recipe_controller.dart';
 import '../env.dart';
 import '../models/custom_exception.dart';
 import '../models/recipe_model.dart';
@@ -32,7 +34,7 @@ class RecipeScreen extends HookConsumerWidget {
         ref.watch(breakfastRecipeControllerProvider);
 
     return Scaffold(
-        backgroundColor: ColourConstant.kBlueColor,
+        backgroundColor: ColourConstant.kLightBlueColor,
         appBar: AppBar(
           title: Text(
             " Recipe",
@@ -47,133 +49,222 @@ class RecipeScreen extends HookConsumerWidget {
         body: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
           return Container(
               width: double.infinity,
-              padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 30.0),
+              height: double.infinity,
+              padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
               constraints: BoxConstraints.expand(),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Breakfast",
-                        style: TextStyle(
+              // decoration: BoxDecoration(
+              //   gradient: ColourConstant.kBackgroundColor,
+                
+              // ),
+              child: Container(
+                // decoration: BoxDecoration(color: ColourConstant.kWhiteColor,borderRadius: BorderRadius.only(
+                //     topLeft: Radius.circular(20),
+                //     topRight: Radius.circular(20)),),
+                width: double.infinity,
+                child: FutureBuilder(
+                    future:
+                        ref.watch(recipeControllerProvider).retrieveRecipe(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if(snapshot.connectionState != ConnectionState.done){
+                        return Center(child: CircularProgressIndicator(
+                          // backgroundColor: ColourConstant.kWhiteColor,
                           color: ColourConstant.kDarkColor,
-                          fontSize: ColourConstant.h1,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                          icon: FaIcon(FontAwesomeIcons.arrowsRotate),
-                          onPressed: () async => await ref
-                              .watch(breakfastRecipeControllerProvider)
-                              .randomBreakfastRecipe()),
-                    ],
-                  ),
-                  breakfastCard(),
-                  SizedBox(height: getProportionateScreenHeight(10),),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Lunch",
-                        style: TextStyle(
-                          color: ColourConstant.kDarkColor,
-                          fontSize: ColourConstant.h1,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                          icon: FaIcon(FontAwesomeIcons.arrowsRotate),
-                          onPressed: () async => await ref
-                              .watch(lunchRecipeControllerProvider)
-                              .randomLunchRecipe()),
-                    ],
-                  ),
-                  lunchCard(),
-                ],
+                        ));
+                      }else{
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Text(
+                            "No data",
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Breakfast",
+                                    style: TextStyle(
+                                      color: ColourConstant.kDarkColor,
+                                      fontSize: ColourConstant.h1,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                      icon:
+                                          FaIcon(FontAwesomeIcons.arrowsRotate),
+                                      onPressed: () async => await ref
+                                          .watch(recipeControllerProvider)
+                                          .breakfastButtonClicked())
+                                ],
+                              ),
+                              recipeCard(snapshot.data[0]),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Lunch",
+                                    style: TextStyle(
+                                      color: ColourConstant.kDarkColor,
+                                      fontSize: ColourConstant.h1,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                      icon:
+                                          FaIcon(FontAwesomeIcons.arrowsRotate),
+                                      onPressed: () async => await ref
+                                          .watch(recipeControllerProvider)
+                                          .lunchButtonClicked())
+                                ],
+                              ),
+                              recipeCard(snapshot.data[1]),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Snacks",
+                                    style: TextStyle(
+                                      color: ColourConstant.kDarkColor,
+                                      fontSize: ColourConstant.h1,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                      icon:
+                                          FaIcon(FontAwesomeIcons.arrowsRotate),
+                                      onPressed: () async => await ref
+                                          .watch(recipeControllerProvider)
+                                          .snakcsButtonClicked())
+                                ],
+                              ),
+                              recipeCard(snapshot.data[2]),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Dinner",
+                                    style: TextStyle(
+                                      color: ColourConstant.kDarkColor,
+                                      fontSize: ColourConstant.h1,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                      icon:
+                                          FaIcon(FontAwesomeIcons.arrowsRotate),
+                                      onPressed: () async => await ref
+                                          .watch(recipeControllerProvider)
+                                          .dinnerButtonClicked())
+                                ],
+                              ),
+                              recipeCard(snapshot.data[3]),
+                              SizedBox(
+                                height: getProportionateScreenHeight(10),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }})
               ));
         })));
   }
 }
 
-class breakfastCard extends HookConsumerWidget {
-  const breakfastCard({
-    Key? key,
-  }) : super(key: key);
+// class breakfastCard extends HookConsumerWidget {
+//   const breakfastCard({
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-        width: double.infinity,
-        child: FutureBuilder(
-            future: ref
-                .watch(breakfastRecipeControllerProvider)
-                .randomBreakfastRecipe(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: Text(
-                    "No data",
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                );
-              } else {
-                return recipeCard(
-                  snapshot,
-                );
-              }
-            }));
-  }
-}
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     return Container(
+//         width: double.infinity,
+//         child: FutureBuilder(
+//             future: ref
+//                 .watch(breakfastRecipeControllerProvider)
+//                 .randomBreakfastRecipe(),
+//             builder: (context, AsyncSnapshot snapshot) {
+//               if (!snapshot.hasData) {
+//                 return Center(
+//                   child: Text(
+//                     "No data",
+//                     style: TextStyle(
+//                       fontSize: 14,
+//                     ),
+//                   ),
+//                 );
+//               } else {
+//                 return recipeCard(
+//                   snapshot,
+//                 );
+//               }
+//             }));
+//   }
+// }
 
-class lunchCard extends HookConsumerWidget {
-  const lunchCard({
-    Key? key,
-  }) : super(key: key);
+// class lunchCard extends HookConsumerWidget {
+//   const lunchCard({
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-        width: double.infinity,
-        child: FutureBuilder(
-            future: ref
-                .watch(lunchRecipeControllerProvider)
-                .randomLunchRecipe(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: Text(
-                    "No data",
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                );
-              } else {
-                return recipeCard(
-                  snapshot,
-                );
-              }
-            }));
-  }
-}
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     return Container(
+//         width: double.infinity,
+//         child: FutureBuilder(
+//             future: ref
+//                 .watch(lunchRecipeControllerProvider)
+//                 .randomLunchRecipe(),
+//             builder: (context, AsyncSnapshot snapshot) {
+//               if (!snapshot.hasData) {
+//                 return Center(
+//                   child: Text(
+//                     "No data",
+//                     style: TextStyle(
+//                       fontSize: 14,
+//                     ),
+//                   ),
+//                 );
+//               } else {
+//                 return recipeCard(
+//                   snapshot,
+//                 );
+//               }
+//             }));
+//   }
+// }
 
 class recipeCard extends HookConsumerWidget {
-  const recipeCard(this.snapshot, {
+  const recipeCard(
+    this.snapshot, {
     Key? key,
   }) : super(key: key);
 
-  final AsyncSnapshot<dynamic> snapshot;
+  final dynamic snapshot;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -185,19 +276,18 @@ class recipeCard extends HookConsumerWidget {
           child: Column(
             children: [
               TouchableFeedback(
-                onTap: () {
-                  print("Testing");
-                  // Navigator.push(
-                  //   // context,
-                  //   // MaterialPageRoute(
-                  //   //     builder: (context) =>
-                  //   //         RecipeDetailPage(
-                  //   //           // title:
-                  //   //           //     '${snapshot.data[index].recipeName}',
-                  //   //           recipe:
-                  //   //               snapshot.data[index],
-                  //   //         )),
-                  // );
+                onTap: () async {
+                  // print("Testing");
+                  // await ref.read(UrRepositoryProvider).retrieveUrByUserID();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RecipeDetailPage(
+                              // title:
+                              //     '${snapshot.data[index].recipeName}',
+                              recipe: snapshot,
+                            )),
+                  );
                 },
                 child: Card(
                   clipBehavior: Clip.antiAlias,
@@ -223,7 +313,7 @@ class recipeCard extends HookConsumerWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                '${snapshot.data.recipe_image}',
+                                '${snapshot.recipe_image}',
                               ),
                             ),
                           ),
@@ -243,11 +333,11 @@ class recipeCard extends HookConsumerWidget {
                                 children: [
                                   Container(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${snapshot.data.recipe_name}",
+                                          "${snapshot.recipe_name}",
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(

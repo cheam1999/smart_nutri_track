@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:smart_nutri_track/controller/meal_controller.dart';
@@ -24,7 +25,7 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: Color(0xFFA9D4EF),
+      backgroundColor: ColourConstant.kLightBlueColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         // title: Text(
@@ -35,10 +36,19 @@ class HomeScreen extends HookConsumerWidget {
         //     fontWeight: FontWeight.bold,
         //   ),
         // ),
-        backgroundColor: ColourConstant.kBlueColor,
+        leading: IconButton(
+            // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+            icon: FaIcon(FontAwesomeIcons.solidCircleUser,
+            color: ColourConstant.kDarkColor,),
+            onPressed: () async {
+              
+            }),
+        backgroundColor: ColourConstant.kLightBlueColor,
         elevation: 0,
       ),
       body: Container(
+        //  decoration: BoxDecoration(gradient: ColourConstant.kBackgroundColor),
+        //  height: double.infinity,
         child: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
           return RefreshIndicator(
             displacement: 10,
