@@ -13,7 +13,7 @@ import '../component/default_button.dart';
 import '../constant/colour_constant.dart';
 import '../controller/camera_view.dart';
 import '../controller/painters/barcode_detector_painter.dart';
-import '../models/barcode_products_model.dart';
+import '../models/food_model.dart';
 import '../models/custom_exception.dart';
 import 'package:http/http.dart' as http;
 import '../env.dart';
@@ -315,12 +315,12 @@ class BarcodeDetailScreen extends HookConsumerWidget {
   }
 
   @override
-  Future<Barcode_products> retrieveBarcodeProducts(String code) async {
+  Future<Food> retrieveBarcodeProducts(String code) async {
     // final int id = _read(authControllerProvider).id!;
     // String? _accesToken = await UserSharedPreferences.getAccessToken() ?? null;
     final String apiRoute = 'get_barcode_products/$code';
     var url = Uri.parse(env!.baseUrl + apiRoute);
-    Barcode_products result = Barcode_products();
+    Food result = Food();
 
     print('Requesting to $url');
 
@@ -339,15 +339,15 @@ class BarcodeDetailScreen extends HookConsumerWidget {
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200) {
-        // // return Barcode_products.fromJson(response.body);
+        // // return Food.fromJson(response.body);
         // final results =
         //     List<Map<String, dynamic>>.from(json.decode(responseBody));
 
-        // List<Barcode_products> items = results
-        //     .map((item) => Barcode_products.fromMap(item))
+        // List<Food> items = results
+        //     .map((item) => Food.fromMap(item))
         //     .toList(growable: false);
         // print('${responseBody[0]['food_name']}');
-        Barcode_products items = Barcode_products(
+        Food items = Food(
           id: responseBody[0]['id'],
           food_code: responseBody[0]['food_code'],
           food_name: responseBody[0]['food_name'],

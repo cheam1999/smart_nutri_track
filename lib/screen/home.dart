@@ -6,15 +6,23 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:smart_nutri_track/controller/meal_controller.dart';
+import 'package:smart_nutri_track/controller/update_profile_controller.dart';
 import 'package:smart_nutri_track/models/weekly_intake.dart';
+import 'package:smart_nutri_track/screen/add_meal.dart';
 import 'package:smart_nutri_track/screen/barcode_scanning.dart';
+import 'package:smart_nutri_track/screen/edit_profile.dart';
+import 'package:smart_nutri_track/screen/profile.dart';
 import 'package:smart_nutri_track/size_config.dart';
 import 'package:smart_nutri_track/theme.dart';
 import 'package:smart_nutri_track/utilities/user_shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../component/normal_text.dart';
+import '../constant/showLoadingDialog.dart';
+import '../controller/auth_controller.dart';
 import '../env.dart';
 import '../models/custom_exception.dart';
 import '../models/food_intakes.dart';
+import 'auth/sign_in.dart';
 
 class HomeScreen extends HookConsumerWidget {
   static String routeName = "/home";
@@ -24,6 +32,8 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authControllerState = ref.watch(authControllerProvider);
+
     return Scaffold(
       backgroundColor: ColourConstant.kLightBlueColor,
       extendBodyBehindAppBar: true,
@@ -36,13 +46,39 @@ class HomeScreen extends HookConsumerWidget {
         //     fontWeight: FontWeight.bold,
         //   ),
         // ),
-        leading: IconButton(
-            // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-            icon: FaIcon(FontAwesomeIcons.solidCircleUser,
-            color: ColourConstant.kDarkColor,),
-            onPressed: () async {
-              
-            }),
+        foregroundColor: ColourConstant.kDarkColor,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            // color: ColourConstant.kGreyColor,
+            onPressed: () {
+              print('${authControllerState.name}');
+              showLogoutDialog(
+                context: context,
+                confirmEvent: () {
+                  ref.read(authControllerProvider.notifier).signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    SignInScreen.routeName,
+                    ModalRoute.withName('/'),
+                  );
+                },
+              );
+            },
+          ),
+        ],
+        // leading: IconButton(
+        //     // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+        //     icon: FaIcon(
+        //       FontAwesomeIcons.solidCircleUser,
+        //       color: ColourConstant.kDarkColor,
+        //     ),
+        //     onPressed: () async {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => ProfileScreen()),
+        //       );
+        //     }),
         backgroundColor: ColourConstant.kLightBlueColor,
         elevation: 0,
       ),
@@ -58,43 +94,131 @@ class HomeScreen extends HookConsumerWidget {
               //     .getFoodSavedAndWaste();
             },
             child: Container(
+                padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
                 child: FutureBuilder(
                     future: retrieveMeals(),
                     builder: (context, AsyncSnapshot snapshot) {
-                      if (!snapshot.hasData) {
+                      if (snapshot.connectionState != ConnectionState.done) {
                         return Center(
-                          child: Text(
-                            "",
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        );
+                            child: CircularProgressIndicator(
+                          // backgroundColor: ColourConstant.kWhiteColor,
+                          color: ColourConstant.kDarkColor,
+                        ));
                       } else {
-                        return SingleChildScrollView(
-                            child: RefreshIndicator(
-                                onRefresh: () async {},
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Your meal today",
-                                      style: TextStyle(
-                                        fontSize: ColourConstant.h1,
-                                        fontWeight: FontWeight.bold,
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: Text(
+                              "",
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return SingleChildScrollView(
+                              child: RefreshIndicator(
+                                  onRefresh: () async {},
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(10),
                                       ),
-                                    ),
-                                    Container(
-                                        decoration: BoxDecoration(
-                                          color: ColourConstant.kWhiteColor,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
+                                      Container(
+                                        // color: ColourConstant.kWhiteColor,
+                                        child: Row(
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 50.0,
+                                              backgroundColor:
+                                                  ColourConstant.kWhiteColor,
+                                              child: ClipOval(
+                                                child: Image.network(
+                                                  'https://snt-recipe-image.s3.ap-southeast-1.amazonaws.com/7th.jpg',
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width:
+                                                  getProportionateScreenWidth(
+                                                      20),
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Welcome ${authControllerState.name}!',
+                                                  style: TextStyle(
+                                                    fontSize: ColourConstant.h1,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          10),
+                                                ),
+                                                Text(
+                                                  '${authControllerState.email}',
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          ColourConstant.h3,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ColourConstant
+                                                          .kDarkColor),
+                                                ),
+                                              ],
+                                            ),
+                                            IconButton(
+                                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                                icon: FaIcon(
+                                                    FontAwesomeIcons.pen),
+                                                onPressed: () async => {
+                                                      await ref
+                                                          .watch(
+                                                              updateProfileController)
+                                                          .getUser(),
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          EditProfileScreen
+                                                              .routeName)
+                                                    })
+                                          ],
                                         ),
-                                        margin: EdgeInsets.only(top: 20),
-                                        padding: EdgeInsets.all(30),
-                                        child: //Text('data')
-                                            BuildingList(list: snapshot.data)),
-                                  ],
-                                )));
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(20),
+                                      ),
+                                      Container(
+                                          decoration: BoxDecoration(
+                                            color: ColourConstant.kWhiteColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30)),
+                                          ),
+                                          margin: EdgeInsets.only(top: 20),
+                                          padding: EdgeInsets.all(30),
+                                          child: //Text('data')
+                                              Column(
+                                            children: [
+                                              Text(
+                                                "Your meal today",
+                                                style: TextStyle(
+                                                  fontSize: ColourConstant.h1,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    getProportionateScreenHeight(
+                                                        30),
+                                              ),
+                                              BuildingList(list: snapshot.data),
+                                            ],
+                                          )),
+                                    ],
+                                  )));
+                        }
                       }
                     })),
           );
@@ -105,9 +229,9 @@ class HomeScreen extends HookConsumerWidget {
         backgroundColor: ColourConstant.kButtonColor,
         elevation: 5.0,
         onPressed: () async {
-          Navigator.push(
+          Navigator.pushNamed(
             context,
-            MaterialPageRoute(builder: (context) => BarcodeScanningScreen()),
+            AddMealScreen.routeName,
           );
         },
         child: Icon(

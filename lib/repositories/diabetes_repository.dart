@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../env.dart';
-import '../models/barcode_products_model.dart';
+import '../models/food_model.dart';
 import '../models/custom_exception.dart';
 
 abstract class BaseDiabetesRepository {}

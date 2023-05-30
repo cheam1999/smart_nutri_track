@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:smart_nutri_track/models/food_intakes.dart';
 
 import '../env.dart';
-import '../models/barcode_products_model.dart';
 import '../models/custom_exception.dart';
 import '../utilities/user_shared_preferences.dart';
 

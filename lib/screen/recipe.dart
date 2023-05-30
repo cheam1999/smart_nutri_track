@@ -6,15 +6,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/component/change_recipe.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
-
-import 'package:smart_nutri_track/controller/recipe_controller.dart';
 import 'package:smart_nutri_track/repositories/ur_repository.dart';
 import 'package:smart_nutri_track/screen/recipe_detail.dart';
 import 'package:smart_nutri_track/theme.dart';
 
 import '../component/touchable_feedback.dart';
 
-import '../controller/recipe/recipe_controller.dart';
+import '../controller/recipe_controller.dart';
 import '../env.dart';
 import '../models/custom_exception.dart';
 import '../models/recipe_model.dart';

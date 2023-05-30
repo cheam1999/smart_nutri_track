@@ -58,13 +58,24 @@ class AuthRepository implements BaseAuthRepository {
       },
     );
     print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    print('Response body me: ${response.body}');
 
     // var responseBody = json.decode(response.body);
     var responseBody = response.body;
 
     if (response.statusCode == 200) {
-      return User.fromJson(responseBody);
+      var decode_results = json.decode(responseBody);
+
+      print('test ${decode_results[0]}');
+      User user = User(
+          id: decode_results[0]['id'],
+          name: decode_results[0]['name'],
+          email: decode_results[0]['email'],
+          accessToken: decode_results[0]['accessToken'],
+          tokenType: decode_results[0]['tokenType'],
+          isLogin: decode_results[0]['isLogin']);
+
+      return user;
     } else {
       throw response.statusCode;
     }
@@ -114,7 +125,18 @@ class AuthRepository implements BaseAuthRepository {
     var responseBody = response.body;
     print('Response body: $responseBody');
     if (response.statusCode == 200) {
-      return User.fromJson(responseBody);
+      var decode_results = json.decode(responseBody);
+
+      print('test ${decode_results[0]['id']}');
+      User user = User(
+          id: decode_results[0]['id'],
+          name: decode_results[0]['name'],
+          email: decode_results[0]['email'],
+          accessToken: decode_results[0]['accessToken'],
+          tokenType: decode_results[0]['tokenType'],
+          isLogin: decode_results[0]['isLogin']);
+
+      return user;
     } else {
       throw CustomException.fromJson(
           jsonDecode(responseBody) as Map<String, dynamic>);
@@ -145,12 +167,23 @@ class AuthRepository implements BaseAuthRepository {
       }),
     );
     print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+    // print('Response body: ${response.body}');
 
     var responseBody = response.body;
-
+    // print('user: ${responseBody.runtimeType}');
     if (response.statusCode == 200) {
-      return User.fromJson(responseBody);
+      var decode_results = json.decode(responseBody);
+
+      // print('test ${temp[0]['id']}');
+      User user = User(
+          id: decode_results[0]['id'],
+          name: decode_results[0]['name'],
+          email: decode_results[0]['email'],
+          accessToken: decode_results[0]['accessToken'],
+          tokenType: decode_results[0]['tokenType'],
+          isLogin: decode_results[0]['isLogin']);
+
+      return user;
     } else {
       throw CustomException.fromJson(
           jsonDecode(responseBody) as Map<String, dynamic>);
@@ -183,6 +216,41 @@ class AuthRepository implements BaseAuthRepository {
       return json.decode(responseBody)['success'];
     } else {
       throw CustomException(message: "Failed to update password");
+    }
+  }
+
+  @override
+  Future<bool> updateProfileDetails(
+      {required String name, required String email}) async {
+    final String apiRoute = 'updateProfileDetails';
+    String? _accesToken = await UserSharedPreferences.getAccessToken() ?? null;
+
+    var url = Uri.parse(env!.baseUrl + apiRoute);
+    print('Requesting to $url');
+    var response = await http.post(
+      url,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $_accesToken',
+      },
+      body: jsonEncode({'email': email, 'name': name}),
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    var responseBody = response.body;
+
+    if (response.statusCode == 200) {
+      if (responseBody == '0') {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+       throw CustomException.fromJson(
+          jsonDecode(responseBody) as Map<String, dynamic>);
     }
   }
 }

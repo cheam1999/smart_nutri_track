@@ -167,9 +167,10 @@ class AuthController extends StateNotifier<User> {
   //   return state.accessToken;
   // }
 
+
   void updateUserState({required User updatedUser}) {
     //TODO: Revise this method (maybe divide auth and user model)
-    print(state);
+    print('state $state');
     print(updatedUser);
     User newState = updatedUser.copyWith(
         accessToken: state.accessToken, tokenType: state.accessToken);
