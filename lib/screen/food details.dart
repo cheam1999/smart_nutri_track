@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/controller/barcode_products_controller.dart';
@@ -30,6 +31,7 @@ class FoodDetailScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var today = DateTime.now();
     final mealControllerState = ref.watch(mealControllerProvider);
+    final sizeController = useTextEditingController();
 
     List<String> meal = [
       "BREAKFAST",
@@ -121,7 +123,8 @@ class FoodDetailScreen extends HookConsumerWidget {
                                       errorText: mealControllerState.cat.error,
                                     ),
                                     hint: Text("Select your meal"),
-                                    value: mealControllerState.cat.value,
+                                    value: ref.watch(mealControllerProvider).cat.value, 
+                                    //mealControllerState.cat.value,
                                     onChanged: (String? value) {
                                       ref
                                           .read(mealControllerProvider)
@@ -159,12 +162,14 @@ class FoodDetailScreen extends HookConsumerWidget {
                                     flex: 2,
                                     child: TextFormField(
                                       autofocus: true,
-                                      initialValue: '${food!.food_serving_size}',
+                                      // controller: sizeController,
+                                      initialValue: ref.read(mealControllerProvider).setInitialValue('${food!.food_serving_size}'),
                                       decoration: InputDecoration(
                                         errorText:
                                             mealControllerState.size.error,
                                         hintText:
                                             "serving size in gram (g) or ml",
+                                        
                                       ),
                                       onChanged: (String value) {
                                         ref

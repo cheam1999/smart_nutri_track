@@ -48,7 +48,7 @@ class DiaryScreen extends HookConsumerWidget {
               ),
               child: TabBar(
                 labelColor: Colors.white,
-                unselectedLabelColor: ColourConstant.kGreyColor,
+                unselectedLabelColor: ColourConstant.kWhiteColor,
                 labelStyle: TextStyle(
                   fontSize: getProportionateScreenWidth(13),
                   fontWeight: FontWeight.bold,

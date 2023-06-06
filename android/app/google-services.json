@@ -29,6 +29,49 @@
             {
               "client_id": "630519322035-dvtp4fkqsrv24io6ov461hilv920se2f.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "630519322035-e8ac9h07qh44n1ogc3dk9hbl7d7uupth.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ugek.ugek"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630519322035:android:a327d9a85ea2b2782327c6",
+        "android_client_info": {
+          "package_name": "com.ugek.ugek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630519322035-dvtp4fkqsrv24io6ov461hilv920se2f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw5foy98EWeasJndDhE6HoqYqBbVq6KOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630519322035-dvtp4fkqsrv24io6ov461hilv920se2f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "630519322035-e8ac9h07qh44n1ogc3dk9hbl7d7uupth.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ugek.ugek"
+              }
             }
           ]
         }

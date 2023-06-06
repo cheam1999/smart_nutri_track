@@ -333,7 +333,9 @@ class _CameraViewState extends State<CameraView> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('NO BARCODE DETECTED! PLEASE TRY AGAIN!')));
       } else {
-        showLoadingDialog(context: context);
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            // content: const Text('Code detected')));
+        // showLoadingDialog(context: context);
         Navigator.push(
             context,
             MaterialPageRoute(

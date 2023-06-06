@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_nutri_track/routes.dart';
 import 'package:smart_nutri_track/screen/auth/sign_in.dart';
@@ -12,17 +14,21 @@ import 'package:smart_nutri_track/screen/start.dart';
 import 'package:smart_nutri_track/utilities/user_shared_preferences.dart';
 
 import 'env.dart';
+import 'firebase_options.dart';
 
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  print("?????????????????? $fcmToken");
 
   var url = Platform.isAndroid
-      // ? 'http://10.207.201.74:8030/api/'
+      ? 'http://10.207.203.93:8030/api/'
       // ? 'http://10.213.22.46:8030/api/'
-      ? 'http://10.213.20.30:8030/api/'
+      // ? 'http://10.213.20.30:8030/api/'
       : 'http://10.0.2.2:8030/api/';
   // : 'http://localhost/smartNutriTrack_api/';
 

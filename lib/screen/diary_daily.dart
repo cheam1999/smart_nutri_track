@@ -53,11 +53,12 @@ class DailyDiary extends HookConsumerWidget {
                                   style: textTheme().bodyMedium,
                                 ),
                                 Text(
-                                    '${snapshot.data.carb_val.toStringAsFixed(2)} g'),
+                                    '${snapshot.data.carb_val.toStringAsFixed(2)} %'),
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.carb_level,display_calcium: false,),
+                            Nutrient_status(level: snapshot.data.carb_level,display_calcium: false,
+                            percentage: snapshot.data.carb_val/90,),
                             SizedBox(height: getProportionateScreenHeight(25)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +72,8 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.protein_level,display_calcium: false),
+                            Nutrient_status(level: snapshot.data.protein_level,display_calcium: false,
+                            percentage: snapshot.data.protein_val/150,),
                             SizedBox(height: getProportionateScreenHeight(25)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +87,8 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.sodium_level,display_calcium: false),
+                            Nutrient_status(level: snapshot.data.sodium_level,display_calcium: false,
+                            percentage: snapshot.data.sodium_val/ 9,),
                             SizedBox(height: getProportionateScreenHeight(25)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,7 +102,8 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.calcium_level,display_calcium: true,)
+                            Nutrient_status(level: snapshot.data.calcium_level,display_calcium: true,
+                            percentage: snapshot.data.calcium_val/5,)
                           ],
                         )));
               }

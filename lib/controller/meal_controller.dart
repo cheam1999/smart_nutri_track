@@ -36,6 +36,11 @@ class MealController extends ChangeNotifier {
     notifyListeners();
   }
 
+  String setInitialValue(String val) {
+    changeSize(val);
+    return _size.value!;
+  }
+
   bool get isSizeValid {
     if (_size.value != "" && _size.value != null) return true;
 
@@ -43,7 +48,7 @@ class MealController extends ChangeNotifier {
   }
 
   bool get isCatValid {
-    if (_size.value != "" && _size.value != null) return true;
+    if (_cat.value != "" && _cat.value != null) return true;
 
     return false;
   }
@@ -87,9 +92,8 @@ class MealController extends ChangeNotifier {
         String errorCat = "Please select a meal";
 
         print(errorCat);
-        _cat = ValidationItem(_cat.error,errorCat);
+        _cat = ValidationItem(_cat.error, errorCat);
       }
-
 
       notifyListeners();
       return false;

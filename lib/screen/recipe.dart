@@ -28,7 +28,6 @@ class RecipeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
         backgroundColor: ColourConstant.kLightBlueColor,
         appBar: AppBar(
@@ -50,142 +49,143 @@ class RecipeScreen extends HookConsumerWidget {
               constraints: BoxConstraints.expand(),
               // decoration: BoxDecoration(
               //   gradient: ColourConstant.kBackgroundColor,
-                
+
               // ),
               child: Container(
-                // decoration: BoxDecoration(color: ColourConstant.kWhiteColor,borderRadius: BorderRadius.only(
-                //     topLeft: Radius.circular(20),
-                //     topRight: Radius.circular(20)),),
-                width: double.infinity,
-                child: FutureBuilder(
-                    future:
-                        ref.watch(recipeControllerProvider).retrieveRecipe(),
-                    builder: (context, AsyncSnapshot snapshot) {
-                      if(snapshot.connectionState != ConnectionState.done){
-                        return Center(child: CircularProgressIndicator(
-                          // backgroundColor: ColourConstant.kWhiteColor,
-                          color: ColourConstant.kDarkColor,
-                        ));
-                      }else{
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: Text(
-                            "No data",
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                  // decoration: BoxDecoration(color: ColourConstant.kWhiteColor,borderRadius: BorderRadius.only(
+                  //     topLeft: Radius.circular(20),
+                  //     topRight: Radius.circular(20)),),
+                  width: double.infinity,
+                  child: FutureBuilder(
+                      future:
+                          ref.watch(recipeControllerProvider).retrieveRecipe(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState != ConnectionState.done) {
+                          return Center(
+                              child: CircularProgressIndicator(
+                            // backgroundColor: ColourConstant.kWhiteColor,
+                            color: ColourConstant.kDarkColor,
+                          ));
+                        } else {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: Text(
+                                "No data",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            );
+                          } else {
+                            return SingleChildScrollView(
+                              child: Column(
                                 children: [
-                                  Text(
-                                    "Breakfast",
-                                    style: TextStyle(
-                                      color: ColourConstant.kDarkColor,
-                                      fontSize: ColourConstant.h1,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Breakfast",
+                                        style: TextStyle(
+                                          color: ColourConstant.kDarkColor,
+                                          fontSize: ColourConstant.h1,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                          icon: FaIcon(
+                                              FontAwesomeIcons.arrowsRotate),
+                                          onPressed: () async => await ref
+                                              .watch(recipeControllerProvider)
+                                              .breakfastButtonClicked())
+                                    ],
                                   ),
-                                  IconButton(
-                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                      icon:
-                                          FaIcon(FontAwesomeIcons.arrowsRotate),
-                                      onPressed: () async => await ref
-                                          .watch(recipeControllerProvider)
-                                          .breakfastButtonClicked())
+                                  recipeCard(snapshot.data[0]),
+                                  SizedBox(
+                                    height: getProportionateScreenHeight(10),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Lunch",
+                                        style: TextStyle(
+                                          color: ColourConstant.kDarkColor,
+                                          fontSize: ColourConstant.h1,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                          icon: FaIcon(
+                                              FontAwesomeIcons.arrowsRotate),
+                                          onPressed: () async => await ref
+                                              .watch(recipeControllerProvider)
+                                              .lunchButtonClicked())
+                                    ],
+                                  ),
+                                  recipeCard(snapshot.data[1]),
+                                  SizedBox(
+                                    height: getProportionateScreenHeight(10),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Snacks",
+                                        style: TextStyle(
+                                          color: ColourConstant.kDarkColor,
+                                          fontSize: ColourConstant.h1,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                          icon: FaIcon(
+                                              FontAwesomeIcons.arrowsRotate),
+                                          onPressed: () async => await ref
+                                              .watch(recipeControllerProvider)
+                                              .snakcsButtonClicked())
+                                    ],
+                                  ),
+                                  recipeCard(snapshot.data[2]),
+                                  SizedBox(
+                                    height: getProportionateScreenHeight(10),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Dinner",
+                                        style: TextStyle(
+                                          color: ColourConstant.kDarkColor,
+                                          fontSize: ColourConstant.h1,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                          // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
+                                          icon: FaIcon(
+                                              FontAwesomeIcons.arrowsRotate),
+                                          onPressed: () async => await ref
+                                              .watch(recipeControllerProvider)
+                                              .dinnerButtonClicked())
+                                    ],
+                                  ),
+                                  recipeCard(snapshot.data[3]),
+                                  SizedBox(
+                                    height: getProportionateScreenHeight(10),
+                                  ),
                                 ],
                               ),
-                              recipeCard(snapshot.data[0]),
-                              SizedBox(
-                                height: getProportionateScreenHeight(10),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Lunch",
-                                    style: TextStyle(
-                                      color: ColourConstant.kDarkColor,
-                                      fontSize: ColourConstant.h1,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  IconButton(
-                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                      icon:
-                                          FaIcon(FontAwesomeIcons.arrowsRotate),
-                                      onPressed: () async => await ref
-                                          .watch(recipeControllerProvider)
-                                          .lunchButtonClicked())
-                                ],
-                              ),
-                              recipeCard(snapshot.data[1]),
-                              SizedBox(
-                                height: getProportionateScreenHeight(10),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Snacks",
-                                    style: TextStyle(
-                                      color: ColourConstant.kDarkColor,
-                                      fontSize: ColourConstant.h1,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  IconButton(
-                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                      icon:
-                                          FaIcon(FontAwesomeIcons.arrowsRotate),
-                                      onPressed: () async => await ref
-                                          .watch(recipeControllerProvider)
-                                          .snakcsButtonClicked())
-                                ],
-                              ),
-                              recipeCard(snapshot.data[2]),
-                              SizedBox(
-                                height: getProportionateScreenHeight(10),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Dinner",
-                                    style: TextStyle(
-                                      color: ColourConstant.kDarkColor,
-                                      fontSize: ColourConstant.h1,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  IconButton(
-                                      // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-                                      icon:
-                                          FaIcon(FontAwesomeIcons.arrowsRotate),
-                                      onPressed: () async => await ref
-                                          .watch(recipeControllerProvider)
-                                          .dinnerButtonClicked())
-                                ],
-                              ),
-                              recipeCard(snapshot.data[3]),
-                              SizedBox(
-                                height: getProportionateScreenHeight(10),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    }})
-              ));
+                            );
+                          }
+                        }
+                      })));
         })));
   }
 }
@@ -307,11 +307,10 @@ class recipeCard extends HookConsumerWidget {
                           child: Opacity(
                             opacity: 1,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                '${snapshot.recipe_image}',
-                              ),
-                            ),
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: FadeInImage.assetNetwork(
+                                    placeholder: 'assets/graphics/food.png',
+                                    image: '${snapshot.recipe_image}',)),
                           ),
                         ),
                         Expanded(

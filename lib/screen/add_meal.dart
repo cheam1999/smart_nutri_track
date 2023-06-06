@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:smart_nutri_track/controller/food%20details.dart';
+
 import 'package:smart_nutri_track/controller/food_controller.dart';
 import 'package:smart_nutri_track/screen/auth/sign_in.dart';
+import 'package:smart_nutri_track/screen/barcode_scanning.dart';
+import 'package:smart_nutri_track/screen/food%20details.dart';
 import 'package:smart_nutri_track/theme.dart';
 
 import '../constant/colour_constant.dart';
@@ -69,8 +71,8 @@ class AddMealScreen extends HookConsumerWidget {
                           'search',
                           Duration(milliseconds: 500),
                           () => ref
-                              .read(foodControllerProvider)
-                              .changeSearchWord(value));
+                              .watch(foodControllerProvider)
+                              .filterSearchResults(value));
                     },
                     decoration: InputDecoration(
                       hintText: 'Search a Food',
@@ -99,11 +101,11 @@ class AddMealScreen extends HookConsumerWidget {
                             ),
                           ],
                         ),
-                        onTap: () async {
-                          await ref
-                              .watch(foodControllerProvider)
-                              .filterSearchResults();
-                        },
+                        // onTap: () async {
+                        //   await ref
+                        //       .watch(foodControllerProvider)
+                        //       .filterSearchResults(value);
+                        // },
                       ),
                       // : GestureDetector(
                       //     child: const Icon(Icons.close),
@@ -120,19 +122,23 @@ class AddMealScreen extends HookConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding:
-                            EdgeInsets.all(getProportionateScreenWidth(10)),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: ColourConstant.kDarkColor),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            FaIcon(FontAwesomeIcons.barcode),
-                            Text('Scan a barcode'),
-                          ],
+                      
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, BarcodeScanningScreen.routeName),
+                        child: Container(
+                          padding:
+                              EdgeInsets.all(getProportionateScreenWidth(10)),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: ColourConstant.kDarkColor),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              FaIcon(FontAwesomeIcons.barcode),
+                              Text('Scan a barcode'),
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -197,10 +203,10 @@ class AddMealScreen extends HookConsumerWidget {
                                                         context,
                                                         MaterialPageRoute(
                                                           builder: (context) =>
-                                                              FoodDetailScreen(
-                                                            food: snapshot
+                                                             FoodDetailScreen(
+                                                               food: snapshot
                                                                 .data[index],
-                                                          ),
+                                                             )
                                                         ));
                                                   },
                                                   child: Container(

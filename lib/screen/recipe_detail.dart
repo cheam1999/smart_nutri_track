@@ -87,7 +87,7 @@ class RecipeDetailPage extends HookConsumerWidget {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: Image.network(
-                                  '${recipe.recipe_image}',
+                                  '${recipe.recipe_image}', 
                                 ),
                               ),
                               SizedBox(

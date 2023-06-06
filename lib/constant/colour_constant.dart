@@ -14,6 +14,7 @@ class ColourConstant {
   );
   static const Color kButtonColor = Color(0xFF52ABE1);
   //static const Color kBackgroundColor = Color(0xFFFBF2EC);
+  static const Color kPinkColor = Color(0xFFFDE5F2);
   static const Color kBlueColor = Color(0xFF52ABE1);
   static const Color kLightBlueColor = Color(0xFFA9D4EF);
   static const Color kDarkColor = Color(0xFF272443);

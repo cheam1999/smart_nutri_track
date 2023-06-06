@@ -20,173 +20,242 @@ class WeeklyDiary extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-        child: FutureBuilder(
-            future: retrieveWeeklySummary(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: Text(
-                    "",
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                );
-              } else {
-                return SingleChildScrollView(
-                  child: Container(
-                      padding: EdgeInsets.all(getProportionateScreenWidth(30)),
-                      child: RefreshIndicator(
-                          onRefresh: () async {},
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text("Nutrients Summary",
-                                  style: textTheme().bodyLarge),
-                              Text(
-                                "From ${DateFormat('dd-MMMM-yyyy').format(snapshot.data.from_date)} to ${DateFormat('dd-MMMM-yyyy').format(snapshot.data.sun_date)}",
-                                style: textTheme().bodySmall,
+    return SafeArea(
+      child: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Column(
+          children: [
+            Container(
+                child: FutureBuilder(
+                    future: retrieveWeeklySummary(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return Center(
+                            child: CircularProgressIndicator(
+                          // backgroundColor: ColourConstant.kWhiteColor,
+                          color: ColourConstant.kDarkColor,
+                        ));
+                      } else {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: Text(
+                              "",
+                              style: TextStyle(
+                                fontSize: 14,
                               ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(20)),
-                              Container(
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Your weekly dietary score',
-                                      style: textTheme().bodyMedium,
-                                    ),
-                                    Text(
-                                      '${double.parse(snapshot.data.score).toStringAsFixed(0)}%',
-                                      style: TextStyle(
-                                          fontSize:
-                                              getProportionateScreenHeight(50),
-                                          fontWeight: FontWeight.bold,
-                                          color: ColourConstant.kBlueColor),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(20)),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Carbohydrates',
-                                    style: textTheme().bodyMedium,
-                                  ),
-                                  Text(
-                                      '${snapshot.data.carb_val.toStringAsFixed(2)} %'),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(10)),
-                              Nutrient_status(level: snapshot.data.carb_level,display_calcium: false),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(25)),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Protein',
-                                    style: textTheme().bodyMedium,
-                                  ),
-                                  Text(
-                                      '${(snapshot.data.protein_val.toStringAsFixed(2))} g'),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(10)),
-                              Nutrient_status(
-                                  level: snapshot.data.protein_level,display_calcium: false),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(25)),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Sodium',
-                                    style: textTheme().bodyMedium,
-                                  ),
-                                  Text(
-                                      '${snapshot.data.sodium_val.toStringAsFixed(2)} g'),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(10)),
-                              Nutrient_status(
-                                  level: snapshot.data.sodium_level,display_calcium: false),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(25)),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Calcium',
-                                    style: textTheme().bodyMedium,
-                                  ),
-                                  Text(
-                                      '${snapshot.data.calcium_val.toStringAsFixed(2)} g'),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(10)),
-                              Nutrient_status(
-                                level: snapshot.data.calcium_level,
-                                display_calcium: true,
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(20)),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  alignment: Alignment.center,
-                                  backgroundColor: ColourConstant.kBlueColor,
-                                  minimumSize: Size(
-                                      getProportionateScreenWidth(300),
-                                      getProportionateScreenHeight(40)),
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                ),
-                                onPressed: () async {
-                                  bool diabetes = false;
-
-                                  diabetes = await retrieveDiabetesPrediction(
-                                      snapshot.data.sodium_val
-                                          .toStringAsFixed(2));
-
-                                  if (!diabetes) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: const Text(
-                                                'You suspect gestational diabetes! We suggest you have a medical check-up.')));
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: const Text(
-                                                'Hooray! You are free from gestational diabetes.')));
-                                  }
-                                },
-                                child: Text(
-                                  'Click Here for Gestational Diabetes Prediction',
-                                  // style: textTheme().bodyMedium,
-                                ),
-                              ),
-                            ],
-                          ))),
-                );
-              }
-            }));
+                            ),
+                          );
+                        } else {
+                          return Container(
+                              padding: EdgeInsets.all(
+                                  getProportionateScreenWidth(30)),
+                              child: RefreshIndicator(
+                                  onRefresh: () async {},
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text("Nutrients Summary",
+                                          style: textTheme().bodyLarge),
+                                      Text(
+                                        "From ${DateFormat('dd-MMMM-yyyy').format(snapshot.data.from_date)} to ${DateFormat('dd-MMMM-yyyy').format(snapshot.data.sun_date)}",
+                                        style: textTheme().bodySmall,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(20)),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Your weekly dietary score',
+                                              style: textTheme().bodyMedium,
+                                            ),
+                                            Text(
+                                              '${double.parse(snapshot.data.score).toStringAsFixed(0)}%',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      getProportionateScreenHeight(
+                                                          50),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: ColourConstant
+                                                      .kBlueColor),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(20)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Carbohydrates',
+                                            style: textTheme().bodyMedium,
+                                          ),
+                                          Text(
+                                              '${snapshot.data.carb_val.toStringAsFixed(2)} %'),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Nutrient_status(
+                                        level: snapshot.data.carb_level,
+                                        display_calcium: false,
+                                        percentage: snapshot.data.carb_val / 90,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(25)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Protein',
+                                            style: textTheme().bodyMedium,
+                                          ),
+                                          Text(
+                                              '${(snapshot.data.protein_val.toStringAsFixed(2))} g'),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Nutrient_status(
+                                          level: snapshot.data.protein_level,
+                                          display_calcium: false,
+                                          percentage:
+                                              snapshot.data.protein_val / 150),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(25)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Sodium',
+                                            style: textTheme().bodyMedium,
+                                          ),
+                                          Text(
+                                              '${snapshot.data.sodium_val.toStringAsFixed(2)} g'),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Nutrient_status(
+                                        level: snapshot.data.sodium_level,
+                                        display_calcium: false,
+                                        percentage:
+                                            snapshot.data.sodium_val / 9,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(25)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Calcium',
+                                            style: textTheme().bodyMedium,
+                                          ),
+                                          Text(
+                                              '${snapshot.data.calcium_val.toStringAsFixed(2)} g'),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Nutrient_status(
+                                        level: snapshot.data.calcium_level,
+                                        display_calcium: true,
+                                        percentage:
+                                            snapshot.data.calcium_val / 5,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(20)),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: ColourConstant.kPinkColor
+                                              .withOpacity(0.9),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30)),
+                                        ),
+                                        margin: EdgeInsets.only(top: 20),
+                                        padding: EdgeInsets.all(30),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              "Your Diabetes Prediction Result",
+                                              style: textTheme().bodyMedium,
+                                            ),
+                                            SizedBox(height: getProportionateScreenHeight(5),),
+                                            FutureBuilder(
+                                                future:
+                                                    retrieveDiabetesPrediction(
+                                                        snapshot.data.sodium_val
+                                                            .toStringAsFixed(
+                                                                2)),
+                                                builder: (context,
+                                                    AsyncSnapshot snapshot) {
+                                                  if (snapshot
+                                                          .connectionState !=
+                                                      ConnectionState.done) {
+                                                    return Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                      // backgroundColor: ColourConstant.kWhiteColor,
+                                                      color: ColourConstant
+                                                          .kDarkColor,
+                                                    ));
+                                                  } else {
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: Text(
+                                                          "",
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Center(
+                                                        child: snapshot.data
+                                                            ? Text(
+                                                                'Hooray! You are free from gestational diabetes.',
+                                                                textAlign: TextAlign.center,
+                                                                )
+                                                            : Text(
+                                                                'You suspect gestational diabetes! We suggest you have a medical check-up.',
+                                                                textAlign: TextAlign.center,),
+                                                      );
+                                                    }
+                                                  }
+                                                }),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )));
+                        }
+                      }
+                    })),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<Weekly_summary> retrieveWeeklySummary() async {

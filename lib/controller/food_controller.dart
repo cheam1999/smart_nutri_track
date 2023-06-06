@@ -48,8 +48,9 @@ class FoodController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> filterSearchResults() async {
+  Future<void> filterSearchResults(String value) async {
     // searched.clear();
+    changeSearchWord(value);
     
     if (food.isEmpty) {
       print('food $food');

@@ -192,7 +192,7 @@ class HomeScreen extends HookConsumerWidget {
                                       ),
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: ColourConstant.kWhiteColor,
+                                            color: ColourConstant.kWhiteColor.withOpacity(0.9),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(30)),
                                           ),
@@ -216,6 +216,10 @@ class HomeScreen extends HookConsumerWidget {
                                               BuildingList(list: snapshot.data),
                                             ],
                                           )),
+                                      SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(30),
+                                      ),
                                     ],
                                   )));
                         }

@@ -65,251 +65,268 @@ class BarcodeDetailScreen extends HookConsumerWidget {
             child: FutureBuilder(
                 future: retrieveBarcodeProducts(code!),
                 builder: (context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData) {
+                  if (snapshot.connectionState != ConnectionState.done) {
                     return Center(
-                      child: Text(
-                        "Sorry, the product does not exist in our database.",
-                        style: TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    );
+                        child: CircularProgressIndicator(
+                      // backgroundColor: ColourConstant.kWhiteColor,
+                      color: ColourConstant.kDarkColor,
+                    ));
                   } else {
-                    return SingleChildScrollView(
-                        child: RefreshIndicator(
-                            onRefresh: () async {},
-                            child: SafeArea(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(20)),
-                                    Text(
-                                      snapshot.data.food_name,
-                                      style: TextStyle(
-                                        fontSize: ColourConstant.h1,
-                                        fontWeight: FontWeight.bold,
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: Text(
+                          "Sorry, the product does not exist in our database.",
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return SingleChildScrollView(
+                          child: RefreshIndicator(
+                              onRefresh: () async {},
+                              child: SafeArea(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(20)),
+                                      Text(
+                                        snapshot.data.food_name,
+                                        style: TextStyle(
+                                          fontSize: ColourConstant.h1,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Divider(
-                                      color: ColourConstant.kDarkColor,
-                                      thickness: 0.5,
-                                      height: getProportionateScreenHeight(30),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            'Date',
-                                            style: TextStyle(
-                                              fontSize: ColourConstant.h4,
-                                              color: ColourConstant.kDarkColor,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            "${today.toString().substring(0, 10)}",
-                                            style: TextStyle(
-                                              fontSize: ColourConstant.h4,
-                                              color: ColourConstant.kBlueColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
+                                      Divider(
+                                        color: ColourConstant.kDarkColor,
+                                        thickness: 0.5,
                                         height:
-                                            getProportionateScreenHeight(10)),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            'Meal',
-                                            style: TextStyle(
-                                              fontSize: ColourConstant.h4,
-                                              color: ColourConstant.kDarkColor,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child:
-                                              DropdownButtonFormField<String>(
-                                            isExpanded: true,
-                                            decoration: InputDecoration(
-                                              // labelText: "Meal",
-                                              errorText:
-                                                  mealControllerState.cat.error,
-                                            ),
-                                            hint: Text("Select your meal"),
-                                            value:
-                                                mealControllerState.cat.value,
-                                            onChanged: (String? value) {
-                                              ref
-                                                  .read(mealControllerProvider)
-                                                  .changeCat(value!);
-                                            },
-                                            items: meal
-                                                .map(
-                                                  (String value) =>
-                                                      DropdownMenuItem<String>(
-                                                    value: value,
-                                                    child: Text(
-                                                      '${value}',
-                                                    ),
-                                                  ),
-                                                )
-                                                .toList(),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(10)),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                            'Serving Size',
-                                            style: TextStyle(
-                                              fontSize: ColourConstant.h4,
-                                              color: ColourConstant.kDarkColor,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                            flex: 2,
-                                            child: TextFormField(
-                                              autofocus: true,
-                                              initialValue:
-                                                  '${snapshot.data.food_serving_size}',
-                                              decoration: InputDecoration(
-                                                errorText: mealControllerState
-                                                    .size.error,
-                                                hintText:
-                                                    "serving size in gram (g) or ml",
+                                            getProportionateScreenHeight(30),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'Date',
+                                              style: TextStyle(
+                                                fontSize: ColourConstant.h4,
+                                                color:
+                                                    ColourConstant.kDarkColor,
                                               ),
-                                              onChanged: (String value) {
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Text(
+                                              "${today.toString().substring(0, 10)}",
+                                              style: TextStyle(
+                                                fontSize: ColourConstant.h4,
+                                                color:
+                                                    ColourConstant.kBlueColor,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'Meal',
+                                              style: TextStyle(
+                                                fontSize: ColourConstant.h4,
+                                                color:
+                                                    ColourConstant.kDarkColor,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child:
+                                                DropdownButtonFormField<String>(
+                                              isExpanded: true,
+                                              decoration: InputDecoration(
+                                                // labelText: "Meal",
+                                                errorText: mealControllerState
+                                                    .cat.error,
+                                              ),
+                                              hint: Text("Select your meal"),
+                                              value:
+                                                  mealControllerState.cat.value,
+                                              onChanged: (String? value) {
                                                 ref
                                                     .read(
                                                         mealControllerProvider)
-                                                    .changeSize(value);
+                                                    .changeCat(value!);
                                               },
-                                            ))
-                                      ],
-                                    ),
-                                    Divider(
-                                      color: ColourConstant.kDarkColor,
-                                      thickness: 0.5,
-                                      height: getProportionateScreenHeight(30),
-                                    ),
-                                    Text(
-                                      'Nutrition',
-                                      style: TextStyle(
-                                          fontSize: ColourConstant.h3,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(20)),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Carbohydrates'),
-                                        Text(
-                                          '${snapshot.data.carbohydrates_100g} g',
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(10)),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Protein'),
-                                        Text(
-                                          '${snapshot.data.proteins_100g} g',
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(10)),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Sodium'),
-                                        Text(
-                                          '${snapshot.data.sodium_100g} g',
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(10)),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Calcium'),
-                                        Text(
-                                          '${snapshot.data.calcium_100g} g',
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(30)),
-                                    DefaultButton(
-                                        text: "Add meal",
-                                        press: () async {
-                                          final bool success = await ref
-                                              .read(mealControllerProvider)
-                                              .saveMeals(
-                                                  meal: "Breakfast",
-                                                  // size: 100,
-                                                  food_id: snapshot.data.id);
-
-                                          if (success) {
-                                            Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              InitScreen.routeName,
-                                              ModalRoute.withName('/'),
-                                            );
-                                          }
-                                        }),
-                                    SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(20)),
-                                    DefaultButton(
-                                      text: "Not Now",
-                                      press: () =>
-                                          Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        InitScreen.routeName,
-                                        ModalRoute.withName('/'),
+                                              items: meal
+                                                  .map(
+                                                    (String value) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                      value: value,
+                                                      child: Text(
+                                                        '${value}',
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      isPrimary: false,
-                                    ),
-                                  ],
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              'Serving Size',
+                                              style: TextStyle(
+                                                fontSize: ColourConstant.h4,
+                                                color:
+                                                    ColourConstant.kDarkColor,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                              flex: 2,
+                                              child: TextFormField(
+                                                autofocus: true,
+                                                initialValue:
+                                                    ref.read(mealControllerProvider).setInitialValue('${snapshot.data.food_serving_size}'),
+                                                decoration: InputDecoration(
+                                                  errorText: mealControllerState
+                                                      .size.error,
+                                                  hintText:
+                                                      "serving size in gram (g) or ml",
+                                                ),
+                                                onChanged: (String value) {
+                                                  ref
+                                                      .read(
+                                                          mealControllerProvider)
+                                                      .changeSize(value);
+                                                },
+                                              ))
+                                        ],
+                                      ),
+                                      Divider(
+                                        color: ColourConstant.kDarkColor,
+                                        thickness: 0.5,
+                                        height:
+                                            getProportionateScreenHeight(30),
+                                      ),
+                                      Text(
+                                        'Nutrition',
+                                        style: TextStyle(
+                                            fontSize: ColourConstant.h3,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(20)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Carbohydrates'),
+                                          Text(
+                                            '${snapshot.data.carbohydrates_100g} g',
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Protein'),
+                                          Text(
+                                            '${snapshot.data.proteins_100g} g',
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Sodium'),
+                                          Text(
+                                            '${snapshot.data.sodium_100g} g',
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(10)),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Calcium'),
+                                          Text(
+                                            '${snapshot.data.calcium_100g} g',
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(30)),
+                                      DefaultButton(
+                                          text: "Add meal",
+                                          press: () async {
+                                            final bool success = await ref
+                                                .read(mealControllerProvider)
+                                                .saveMeals(
+                                                    meal: "Breakfast",
+                                                    // size: 100,
+                                                    food_id: snapshot.data.id);
+
+                                            if (success) {
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                InitScreen.routeName,
+                                                ModalRoute.withName('/'),
+                                              );
+                                            }
+                                          }),
+                                      SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(20)),
+                                      DefaultButton(
+                                        text: "Not Now",
+                                        press: () =>
+                                            Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          InitScreen.routeName,
+                                          ModalRoute.withName('/'),
+                                        ),
+                                        isPrimary: false,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )));
+                              )));
+                    }
                   }
                 })));
   }
@@ -335,7 +352,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
       );
 
       print('Response status: ${response.statusCode}');
-      // print('Response body: ${response.body}');
+      // print('Response body barcode: ${response.body}');
 
       var responseBody = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -346,7 +363,8 @@ class BarcodeDetailScreen extends HookConsumerWidget {
         // List<Food> items = results
         //     .map((item) => Food.fromMap(item))
         //     .toList(growable: false);
-        // print('${responseBody[0]['food_name']}');
+        print('enter');
+        print('food name ${responseBody[0]['energy_kcal_100g']}');
         Food items = Food(
           id: responseBody[0]['id'],
           food_code: responseBody[0]['food_code'],
@@ -354,10 +372,10 @@ class BarcodeDetailScreen extends HookConsumerWidget {
           food_quantity: responseBody[0]['food_quantity'],
           food_serving_size: responseBody[0]['food_serving_size'],
           energy_kcal_100g: responseBody[0]['energy_kcal_100g'],
-          carbohydrates_100g: responseBody[0]['carbohydrates_100g'],
-          proteins_100g: responseBody[0]['proteins_100g'],
-          sodium_100g: responseBody[0]['sodium_100g'],
-          calcium_100g: responseBody[0]['calcium_100g'],
+          carbohydrates_100g: "${responseBody[0]['carbohydrates_100g']}",
+          proteins_100g: "${responseBody[0]['proteins_100g']}",
+          sodium_100g: "${responseBody[0]['sodium_100g']}",
+          calcium_100g: "${responseBody[0]['calcium_100g']}",
         );
 
         print(items.food_name);
