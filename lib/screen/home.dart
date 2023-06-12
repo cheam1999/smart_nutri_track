@@ -147,6 +147,9 @@ class HomeScreen extends HookConsumerWidget {
                                               children: [
                                                 Text(
                                                   'Welcome ${authControllerState.name}!',
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: ColourConstant.h1,
                                                     fontWeight: FontWeight.bold,
@@ -192,7 +195,8 @@ class HomeScreen extends HookConsumerWidget {
                                       ),
                                       Container(
                                           decoration: BoxDecoration(
-                                            color: ColourConstant.kWhiteColor.withOpacity(0.9),
+                                            color: ColourConstant.kWhiteColor
+                                                .withOpacity(0.9),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(30)),
                                           ),
@@ -279,6 +283,7 @@ class HomeScreen extends HookConsumerWidget {
         List<Food_intakes> items = results
             .map((item) => Food_intakes.fromMap(item))
             .toList(growable: false);
+        
 
         return items;
       } else {

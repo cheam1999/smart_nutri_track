@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:smart_nutri_track/component/no_food_found_text.dart';
 
 import 'package:smart_nutri_track/controller/food_controller.dart';
 import 'package:smart_nutri_track/screen/auth/sign_in.dart';
@@ -159,12 +160,8 @@ class AddMealScreen extends HookConsumerWidget {
                           } else {
                             if (!snapshot.hasData) {
                               return Center(
-                                child: Text(
-                                  "Search a food to show results",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: ColourConstant.kDarkColor),
-                                ),
+                                // option to add food into db
+                                // child: NoFoodFoundText(),
                               );
                             } else {
                               return RefreshIndicator(
@@ -237,6 +234,8 @@ class AddMealScreen extends HookConsumerWidget {
                                             }),
                                       ],
                                     ),
+                                    SizedBox(height: getProportionateScreenHeight(20),),
+                                    NoFoodFoundText(),
                                   ]));
                             }
                           }

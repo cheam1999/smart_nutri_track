@@ -26,9 +26,8 @@ Future<void> main() async {
   print("?????????????????? $fcmToken");
 
   var url = Platform.isAndroid
-      ? 'http://10.207.203.93:8030/api/'
-      // ? 'http://10.213.22.46:8030/api/'
-      // ? 'http://10.213.20.30:8030/api/'
+      ? 'http://10.213.20.161:8030/api/'
+      // ? 'http://10.213.22.40:8030/api/'
       : 'http://10.0.2.2:8030/api/';
   // : 'http://localhost/smartNutriTrack_api/';
 

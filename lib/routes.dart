@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-
 import 'package:smart_nutri_track/controller/update_profile_controller.dart';
+import 'package:smart_nutri_track/screen/add_food.dart';
 import 'package:smart_nutri_track/screen/add_meal.dart';
 import 'package:smart_nutri_track/screen/auth/sign_in.dart';
 import 'package:smart_nutri_track/screen/auth/sign_up.dart';
@@ -9,6 +9,7 @@ import 'package:smart_nutri_track/screen/barcode_scanning.dart';
 import 'package:smart_nutri_track/screen/diary.dart';
 import 'package:smart_nutri_track/screen/edit_profile.dart';
 import 'package:smart_nutri_track/screen/food%20details.dart';
+import 'package:smart_nutri_track/screen/grocery_list.dart';
 import 'package:smart_nutri_track/screen/home.dart';
 import 'package:smart_nutri_track/screen/profile.dart';
 import 'package:smart_nutri_track/screen/recipe.dart';
@@ -29,4 +30,6 @@ final Map<String, WidgetBuilder> routes = {
   EditProfileScreen.routeName: (context) => EditProfileScreen(),
   AddMealScreen.routeName: (context) => AddMealScreen(),
   FoodDetailScreen.routeName: (context) => FoodDetailScreen(),
+  AddFoodScreen.routeName: (context) => AddFoodScreen(),
+  GroceryListScreen.routeName: (context) => GroceryListScreen(),
 };

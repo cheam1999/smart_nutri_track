@@ -97,4 +97,6 @@ class UrRepository implements BaseUrRepository {
       throw CustomException(message: "Failed to give recommendation");
     }
   }
+
+
 }

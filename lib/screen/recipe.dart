@@ -7,9 +7,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/component/change_recipe.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:smart_nutri_track/repositories/ur_repository.dart';
+import 'package:smart_nutri_track/screen/grocery_list.dart';
 import 'package:smart_nutri_track/screen/recipe_detail.dart';
 import 'package:smart_nutri_track/theme.dart';
 
+import '../component/default_button.dart';
 import '../component/touchable_feedback.dart';
 
 import '../controller/recipe_controller.dart';
@@ -178,7 +180,16 @@ class RecipeScreen extends HookConsumerWidget {
                                   ),
                                   recipeCard(snapshot.data[3]),
                                   SizedBox(
-                                    height: getProportionateScreenHeight(10),
+                                    height: getProportionateScreenHeight(30),
+                                  ),
+                                  DefaultButton(
+                                      text: "Generate Grocery List",
+                                      press: () async {
+                                        Navigator.pushNamed(context,
+                                            GroceryListScreen.routeName);
+                                      }),
+                                  SizedBox(
+                                    height: getProportionateScreenHeight(30),
                                   ),
                                 ],
                               ),
@@ -189,70 +200,6 @@ class RecipeScreen extends HookConsumerWidget {
         })));
   }
 }
-
-// class breakfastCard extends HookConsumerWidget {
-//   const breakfastCard({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return Container(
-//         width: double.infinity,
-//         child: FutureBuilder(
-//             future: ref
-//                 .watch(breakfastRecipeControllerProvider)
-//                 .randomBreakfastRecipe(),
-//             builder: (context, AsyncSnapshot snapshot) {
-//               if (!snapshot.hasData) {
-//                 return Center(
-//                   child: Text(
-//                     "No data",
-//                     style: TextStyle(
-//                       fontSize: 14,
-//                     ),
-//                   ),
-//                 );
-//               } else {
-//                 return recipeCard(
-//                   snapshot,
-//                 );
-//               }
-//             }));
-//   }
-// }
-
-// class lunchCard extends HookConsumerWidget {
-//   const lunchCard({
-//     Key? key,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return Container(
-//         width: double.infinity,
-//         child: FutureBuilder(
-//             future: ref
-//                 .watch(lunchRecipeControllerProvider)
-//                 .randomLunchRecipe(),
-//             builder: (context, AsyncSnapshot snapshot) {
-//               if (!snapshot.hasData) {
-//                 return Center(
-//                   child: Text(
-//                     "No data",
-//                     style: TextStyle(
-//                       fontSize: 14,
-//                     ),
-//                   ),
-//                 );
-//               } else {
-//                 return recipeCard(
-//                   snapshot,
-//                 );
-//               }
-//             }));
-//   }
-// }
 
 class recipeCard extends HookConsumerWidget {
   const recipeCard(
@@ -309,8 +256,9 @@ class recipeCard extends HookConsumerWidget {
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: FadeInImage.assetNetwork(
-                                    placeholder: 'assets/graphics/food.png',
-                                    image: '${snapshot.recipe_image}',)),
+                                  placeholder: 'assets/graphics/food.png',
+                                  image: '${snapshot.recipe_image}',
+                                )),
                           ),
                         ),
                         Expanded(

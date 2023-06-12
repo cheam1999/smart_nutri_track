@@ -164,6 +164,7 @@ class AuthRepository implements BaseAuthRepository {
         'name': name,
         'email': email,
         'password': password,
+        'nutritionist': 0
       }),
     );
     print('Response status: ${response.statusCode}');

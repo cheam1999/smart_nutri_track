@@ -24,12 +24,6 @@ class RecipeController extends ChangeNotifier {
 
   RecipeController(this._read);
 
-  // Future<Recipe> current() async {
-  //   await randomRecipe();
-
-  //   return _current;
-  // }
-
   Future<List<Recipe>> retrieveRecipe() async {
     try {
       Ur results = await _read(UrRepositoryProvider).retrieveUrByUserID();
