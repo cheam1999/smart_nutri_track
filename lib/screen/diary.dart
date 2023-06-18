@@ -34,11 +34,14 @@ class DiaryScreen extends HookConsumerWidget {
         backgroundColor: Colors.transparent.withOpacity(0),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: Text("Diary"),
+          backgroundColor: ColourConstant.kWhiteColor,
+          title: Text("Diary",
+          style: TextStyle(color: ColourConstant.kDarkColor),),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               getProportionateScreenHeight(50),
             ),
+          
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.5),
@@ -47,8 +50,8 @@ class DiaryScreen extends HookConsumerWidget {
                     topRight: Radius.circular(20)),
               ),
               child: TabBar(
-                labelColor: Colors.white,
-                unselectedLabelColor: ColourConstant.kWhiteColor,
+                labelColor: ColourConstant.kWhiteColor,
+                unselectedLabelColor: ColourConstant.kDarkColor,
                 labelStyle: TextStyle(
                   fontSize: getProportionateScreenWidth(13),
                   fontWeight: FontWeight.bold,

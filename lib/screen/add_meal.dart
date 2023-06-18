@@ -11,6 +11,7 @@ import 'package:smart_nutri_track/controller/food_controller.dart';
 import 'package:smart_nutri_track/screen/auth/sign_in.dart';
 import 'package:smart_nutri_track/screen/barcode_scanning.dart';
 import 'package:smart_nutri_track/screen/food%20details.dart';
+import 'package:smart_nutri_track/screen/photo_scanning.dart';
 import 'package:smart_nutri_track/theme.dart';
 
 import '../constant/colour_constant.dart';
@@ -26,15 +27,20 @@ import 'package:http/http.dart' as http;
 
 class AddMealScreen extends HookConsumerWidget {
   static String routeName = "/add_meal";
-  const AddMealScreen({
-    Key? key,
-  }) : super(key: key);
+  final String? foodName;
+  const AddMealScreen({Key? key, this.foodName}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
 
     final food = ref.watch(foodControllerProvider).retrieveFood;
+
+    if (foodName != "") {
+      ref.watch(foodControllerProvider).filterSearchResults(foodName!);
+      // ref.watch(foodControllerProvider).getSearchResult();
+    }
+    print("foodName: $foodName");
 
     return Scaffold(
       backgroundColor: ColourConstant.kWhiteColor,
@@ -57,7 +63,8 @@ class AddMealScreen extends HookConsumerWidget {
           child: RefreshIndicator(
               displacement: 10,
               onRefresh: () async {
-                await ref.watch(foodControllerProvider).retrieveFood();
+                await ref.watch(foodControllerProvider).filterSearchResults(foodName!);
+                
               },
               child: Column(
                 children: [
@@ -66,7 +73,8 @@ class AddMealScreen extends HookConsumerWidget {
                   ),
                   TextFormField(
                     textAlignVertical: TextAlignVertical(y: 0),
-                    controller: searchController,
+                    // controller: searchController,
+                    initialValue: foodName == null ? null : foodName,
                     onChanged: (value) {
                       EasyDebounce.debounce(
                           'search',
@@ -123,14 +131,15 @@ class AddMealScreen extends HookConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
                       GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, BarcodeScanningScreen.routeName),
+                        onTap: () => Navigator.pushNamed(
+                            context, BarcodeScanningScreen.routeName),
                         child: Container(
                           padding:
                               EdgeInsets.all(getProportionateScreenWidth(10)),
                           decoration: BoxDecoration(
-                            border: Border.all(color: ColourConstant.kDarkColor),
+                            border:
+                                Border.all(color: ColourConstant.kDarkColor),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -138,6 +147,29 @@ class AddMealScreen extends HookConsumerWidget {
                             children: [
                               FaIcon(FontAwesomeIcons.barcode),
                               Text('Scan a barcode'),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: getProportionateScreenWidth(10),
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(
+                            context, PlantRecogniser.routeName),
+                        child: Container(
+                          padding:
+                              EdgeInsets.all(getProportionateScreenWidth(10)),
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: ColourConstant.kDarkColor),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              FaIcon(FontAwesomeIcons.camera),
+                              Text('Snap a picture'),
                             ],
                           ),
                         ),
@@ -160,9 +192,9 @@ class AddMealScreen extends HookConsumerWidget {
                           } else {
                             if (!snapshot.hasData) {
                               return Center(
-                                // option to add food into db
-                                // child: NoFoodFoundText(),
-                              );
+                                  // option to add food into db
+                                  // child: NoFoodFoundText(),
+                                  );
                             } else {
                               return RefreshIndicator(
                                   onRefresh: () async {},
@@ -199,12 +231,12 @@ class AddMealScreen extends HookConsumerWidget {
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) =>
-                                                             FoodDetailScreen(
-                                                               food: snapshot
-                                                                .data[index],
-                                                             )
-                                                        ));
+                                                            builder: (context) =>
+                                                                FoodDetailScreen(
+                                                                  food: snapshot
+                                                                          .data[
+                                                                      index],
+                                                                )));
                                                   },
                                                   child: Container(
                                                     padding:
@@ -234,7 +266,9 @@ class AddMealScreen extends HookConsumerWidget {
                                             }),
                                       ],
                                     ),
-                                    SizedBox(height: getProportionateScreenHeight(20),),
+                                    SizedBox(
+                                      height: getProportionateScreenHeight(20),
+                                    ),
                                     NoFoodFoundText(),
                                   ]));
                             }

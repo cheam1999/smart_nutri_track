@@ -31,16 +31,17 @@ class RecipeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        backgroundColor: ColourConstant.kLightBlueColor,
+        // backgroundColor: ColourConstant.kLightBlueColor,
         appBar: AppBar(
           title: Text(
-            " Recipe",
+            "Meal Plan",
             style: TextStyle(
-              color: ColourConstant.kWhiteColor,
+              color: ColourConstant.kDarkColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
+          backgroundColor: ColourConstant.kWhiteColor,
         ),
         extendBodyBehindAppBar: true,
         body: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
@@ -49,10 +50,10 @@ class RecipeScreen extends HookConsumerWidget {
               height: double.infinity,
               padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0),
               constraints: BoxConstraints.expand(),
-              // decoration: BoxDecoration(
-              //   gradient: ColourConstant.kBackgroundColor,
+              decoration: BoxDecoration(
+                color: ColourConstant.kWhiteColor,
 
-              // ),
+              ),
               child: Container(
                   // decoration: BoxDecoration(color: ColourConstant.kWhiteColor,borderRadius: BorderRadius.only(
                   //     topLeft: Radius.circular(20),
@@ -234,10 +235,11 @@ class recipeCard extends HookConsumerWidget {
                 },
                 child: Card(
                   clipBehavior: Clip.antiAlias,
-                  elevation: 5.0,
+                  elevation: 10.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  // shadowColor: ColourConstant.kLightBlueColor,
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: getProportionateScreenWidth(15),

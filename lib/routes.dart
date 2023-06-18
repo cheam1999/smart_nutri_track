@@ -11,6 +11,7 @@ import 'package:smart_nutri_track/screen/edit_profile.dart';
 import 'package:smart_nutri_track/screen/food%20details.dart';
 import 'package:smart_nutri_track/screen/grocery_list.dart';
 import 'package:smart_nutri_track/screen/home.dart';
+import 'package:smart_nutri_track/screen/photo_scanning.dart';
 import 'package:smart_nutri_track/screen/profile.dart';
 import 'package:smart_nutri_track/screen/recipe.dart';
 import 'package:smart_nutri_track/screen/start.dart';
@@ -32,4 +33,6 @@ final Map<String, WidgetBuilder> routes = {
   FoodDetailScreen.routeName: (context) => FoodDetailScreen(),
   AddFoodScreen.routeName: (context) => AddFoodScreen(),
   GroceryListScreen.routeName: (context) => GroceryListScreen(),
+  // PhotoScanning.routeName: (context) => PhotoScanning()
+  PlantRecogniser.routeName:(context) => PlantRecogniser()
 };

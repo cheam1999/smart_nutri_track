@@ -40,6 +40,7 @@ class BarcodeDetailScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var today = DateTime.now();
     final mealControllerState = ref.watch(mealControllerProvider);
+    print('code $code');
 
     List<String> meal = [
       "BREAKFAST",
@@ -207,8 +208,11 @@ class BarcodeDetailScreen extends HookConsumerWidget {
                                               flex: 2,
                                               child: TextFormField(
                                                 autofocus: true,
-                                                initialValue:
-                                                    ref.read(mealControllerProvider).setInitialValue('${snapshot.data.food_serving_size}'),
+                                                initialValue: ref
+                                                    .read(
+                                                        mealControllerProvider)
+                                                    .setInitialValue(
+                                                        '${snapshot.data.food_serving_size}'),
                                                 decoration: InputDecoration(
                                                   errorText: mealControllerState
                                                       .size.error,

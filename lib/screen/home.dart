@@ -35,7 +35,7 @@ class HomeScreen extends HookConsumerWidget {
     final authControllerState = ref.watch(authControllerProvider);
 
     return Scaffold(
-      backgroundColor: ColourConstant.kLightBlueColor,
+      backgroundColor: ColourConstant.kWhiteColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         // title: Text(
@@ -67,23 +67,11 @@ class HomeScreen extends HookConsumerWidget {
             },
           ),
         ],
-        // leading: IconButton(
-        //     // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-        //     icon: FaIcon(
-        //       FontAwesomeIcons.solidCircleUser,
-        //       color: ColourConstant.kDarkColor,
-        //     ),
-        //     onPressed: () async {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => ProfileScreen()),
-        //       );
-        //     }),
-        backgroundColor: ColourConstant.kLightBlueColor,
+        backgroundColor: ColourConstant.kWhiteColor,
         elevation: 0,
       ),
       body: Container(
-        //  decoration: BoxDecoration(gradient: ColourConstant.kBackgroundColor),
+        //  decoration: BoxDecoration(color: ColourConstant.kWhiteColor),
         //  height: double.infinity,
         child: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
           return RefreshIndicator(
@@ -153,6 +141,7 @@ class HomeScreen extends HookConsumerWidget {
                                                   style: TextStyle(
                                                     fontSize: ColourConstant.h1,
                                                     fontWeight: FontWeight.bold,
+                                                    // color: ColourConstant.kBlueColor
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -168,7 +157,7 @@ class HomeScreen extends HookConsumerWidget {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: ColourConstant
-                                                          .kDarkColor),
+                                                          .kBlueColor),
                                                 ),
                                               ],
                                             ),
@@ -198,7 +187,17 @@ class HomeScreen extends HookConsumerWidget {
                                             color: ColourConstant.kWhiteColor
                                                 .withOpacity(0.9),
                                             borderRadius: BorderRadius.all(
-                                                Radius.circular(30)),
+                                                Radius.circular(20)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.8),
+                                                spreadRadius: 2,
+                                                blurRadius: 4,
+                                                offset: Offset(0,
+                                                    2), // changes the shadow position
+                                              ),
+                                            ],
                                           ),
                                           margin: EdgeInsets.only(top: 20),
                                           padding: EdgeInsets.all(30),
@@ -234,13 +233,16 @@ class HomeScreen extends HookConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: "Add Meal",
-        backgroundColor: ColourConstant.kButtonColor,
+        backgroundColor: ColourConstant.kBlueColor,
         elevation: 5.0,
         onPressed: () async {
-          Navigator.pushNamed(
-            context,
-            AddMealScreen.routeName,
-          );
+          Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddMealScreen(
+                    foodName: "",
+                  ),
+                ));
         },
         child: Icon(
           Icons.add,
@@ -283,7 +285,6 @@ class HomeScreen extends HookConsumerWidget {
         List<Food_intakes> items = results
             .map((item) => Food_intakes.fromMap(item))
             .toList(growable: false);
-        
 
         return items;
       } else {
@@ -321,7 +322,7 @@ class BuildingList extends StatelessWidget {
         ListView.builder(
             itemCount: breakfast.length,
             shrinkWrap: true,
-            scrollDirection: Axis.vertical,
+            
             itemBuilder: (BuildContext context, int index) {
               return MealCard(
                   fName: breakfast[index].food_name!,
@@ -364,6 +365,7 @@ class BuildingList extends StatelessWidget {
             itemCount: dinner.length,
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
+            physics: NeverScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               return MealCard(
                   fName: dinner[index].food_name!,

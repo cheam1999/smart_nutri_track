@@ -51,7 +51,6 @@ class FoodController extends ChangeNotifier {
   Future<void> filterSearchResults(String value) async {
     // searched.clear();
     if (value == "") {
-      
       searched.clear();
     }
 
@@ -66,6 +65,7 @@ class FoodController extends ChangeNotifier {
             item.food_name!.toLowerCase().contains(searchWord.toLowerCase()))
         .toList();
     print('Search $searched');
+    // getSearchResult();
     notifyListeners();
   }
 }

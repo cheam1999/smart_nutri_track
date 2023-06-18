@@ -29,6 +29,7 @@ class SignInScreen extends HookConsumerWidget {
           // fontWeight: FontWeight.bold,
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SafeArea(
         child: SizedBox.expand(

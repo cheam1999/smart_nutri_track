@@ -37,6 +37,7 @@ class _InitScreenState extends State<InitScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColourConstant.kWhiteColor,
       body: PageView(
         controller: _pageController,
         children: _screens,
@@ -59,12 +60,12 @@ class _InitScreenState extends State<InitScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
+            icon: Icon(Icons.book),
             label: 'Diary',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle),
-            label: 'Recipe',
+            icon: Icon(Icons.apple),
+            label: 'Meal Plan',
           ),
         ],
       ),

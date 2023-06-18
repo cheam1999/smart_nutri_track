@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -30,7 +30,7 @@ dependencies:
   hooks_riverpod: ^1.0.3+1
   openfoodfacts: ^1.17.0
   google_ml_kit: ^0.7.3
-  camera: ^0.10.0+4
+  camera: '>=0.9.4+5 <0.10.0'
   image_picker: ^0.8.5+3
   google_mlkit_commons: ^0.2.0
   google_mlkit_barcode_scanning: ^0.5.0
@@ -49,6 +49,15 @@ dependencies:
   firebase_messaging: ^14.6.2
   firebase_core_dart: ^1.0.1
   firebase_analytics: ^10.4.2
+  google_mlkit_image_labeling: ^0.3.0
+  get: ^4.6.1
+  tflite_flutter: '>=0.9.0 <=0.10.1'
+  tflite_flutter_helper:
+    git:
+        url: https://github.com/elephantum/tflite_flutter_helper.git
+        ref: a7d7a59a33f7cffa0a2a12ab05625807622cc97a
+
+  
 
 
 dev_dependencies:

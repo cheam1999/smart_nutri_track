@@ -12,8 +12,10 @@ import 'package:smart_nutri_track/screen/barcode_details.dart';
 import 'package:smart_nutri_track/screen/barcode_scanning.dart';
 import 'package:smart_nutri_track/screen/init.dart';
 
+import '../component/default_button.dart';
 import '../constant/showLoadingDialog.dart';
 import '../main.dart';
+import '../size_config.dart';
 import 'painters/barcode_detector_painter.dart';
 
 enum ScreenMode { liveFeed, gallery }
@@ -44,6 +46,13 @@ class _CameraViewState extends State<CameraView> {
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
   final bool _allowPicker = true;
   bool _changingCameraLens = false;
+  String _codeVal = "";
+
+  void _setCodeVal(String temp) {
+    setState(() {
+      _codeVal = temp;
+    });
+  }
 
   final BarcodeScanner _barcodeScanner = BarcodeScanner();
   bool _canProcess = true;
@@ -175,12 +184,25 @@ class _CameraViewState extends State<CameraView> {
           },
         ),
       ),
-      // if (_image != null)
+      // if (_image != nullDefaultButton)
       //   Padding(
       //     padding: const EdgeInsets.all(16.0),
       //     child: Text(
       //         '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
       //   ),
+      SizedBox(height: getProportionateScreenHeight(20)),
+      DefaultButton(
+        text: "Search food",
+        press: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BarcodeDetailScreen(
+                  code: _codeVal,
+                ),
+              ));
+        },
+      )
     ]);
   }
 
@@ -333,16 +355,17 @@ class _CameraViewState extends State<CameraView> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('NO BARCODE DETECTED! PLEASE TRY AGAIN!')));
       } else {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            // content: const Text('Code detected')));
-        // showLoadingDialog(context: context);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BarcodeDetailScreen(
-                code: code,
-              ),
-            ));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: const Text('Code detected')));
+        showLoadingDialog(context: context);
+        _setCodeVal(code);
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => BarcodeDetailScreen(
+        //         code: code,
+        //       ),
+        //     ));
       }
 
       // TODO: set _customPaint to draw boundingRect on top of image

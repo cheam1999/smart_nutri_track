@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:smart_nutri_track/screen/init.dart';
 
 import '../../component/default_button.dart';
@@ -25,6 +26,7 @@ class SignUpScreen extends HookConsumerWidget {
           // fontWeight: FontWeight.bold,
         ),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SafeArea(
         child: SizedBox(
