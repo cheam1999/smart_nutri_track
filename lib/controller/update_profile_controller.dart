@@ -91,13 +91,21 @@ class UpdateProfileController extends ChangeNotifier {
     return false;
   }
 
+  bool get newEmail {
+    if (_email.value != _user.email) {
+      return true;
+    }
+
+    return false;
+  }
+
   bool get isFilled {
     if (_name.value == null && _email.value == null) return false;
     return true;
   }
 
   bool submitData() {
-    if (isValid) {
+    if (isValid && newEmail) {
       print(isValid);
       print("Name: ${_name.value}, Email: ${_email.value}");
 
@@ -113,6 +121,10 @@ class UpdateProfileController extends ChangeNotifier {
         _email = ValidationItem(
             _email.value, ErrorMessages.enterEmailAddressErrorMessage);
 
+      if(!newEmail)
+      _email = ValidationItem(
+            _email.value, ErrorMessages.sameEmailAddressErrorMessage);
+            
       notifyListeners();
     }
 
@@ -129,7 +141,7 @@ class UpdateProfileController extends ChangeNotifier {
         email: _email.value!,
       );
 
-       _read(authControllerProvider.notifier)
+      _read(authControllerProvider.notifier)
           .updateProfileState(updatedUser: updatedUser);
 
       return true;

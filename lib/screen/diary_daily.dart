@@ -57,8 +57,11 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.carb_level,display_calcium: false,
-                            percentage: snapshot.data.carb_val/90,),
+                            Nutrient_status(
+                              level: snapshot.data.carb_level,
+                              display_calcium: false,
+                              percentage: snapshot.data.carb_val / 100 >= 1 ? 1 : snapshot.data.carb_val / 100,
+                            ),
                             SizedBox(height: getProportionateScreenHeight(25)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -72,8 +75,11 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.protein_level,display_calcium: false,
-                            percentage: snapshot.data.protein_val/150,),
+                            Nutrient_status(
+                              level: snapshot.data.protein_level,
+                              display_calcium: false,
+                              percentage: snapshot.data.protein_val / 62 >= 1? 1 : snapshot.data.protein_val / 62,
+                            ),
                             SizedBox(height: getProportionateScreenHeight(25)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,8 +93,11 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.sodium_level,display_calcium: false,
-                            percentage: snapshot.data.sodium_val/ 9,),
+                            Nutrient_status(
+                              level: snapshot.data.sodium_level,
+                              display_calcium: false,
+                              percentage: snapshot.data.sodium_val / 9 >= 1 ? 1 : snapshot.data.sodium_val / 9,
+                            ),
                             SizedBox(height: getProportionateScreenHeight(25)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,132 +111,17 @@ class DailyDiary extends HookConsumerWidget {
                               ],
                             ),
                             SizedBox(height: getProportionateScreenHeight(10)),
-                            Nutrient_status(level: snapshot.data.calcium_level,display_calcium: true,
-                            percentage: snapshot.data.calcium_val/5,)
+                            Nutrient_status(
+                              level: snapshot.data.calcium_level,
+                              display_calcium: true,
+                              percentage: snapshot.data.calcium_val / 2  >= 1 ? 1 : snapshot.data.calcium_val / 2,
+                            )
                           ],
                         )));
               }
             }));
   }
 }
-
-// Widget buildProgressBar(String level) {
-//   if (level == '0') {
-//     // deficiency
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.stretch,
-//       children: [
-//         LinearPercentIndicator(
-//           lineHeight: 10.0,
-//           percent: 0.2,
-//           progressColor: Colors.yellow,
-//         ),
-//         SizedBox(height: getProportionateScreenHeight(5)),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               'Deficiency',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kDarkColor,
-//               ),
-//             ),
-//             Text(
-//               'Sufficiency',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kGreyColor,
-//               ),
-//             ),
-//             Text(
-//               'Overnutrition',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kGreyColor,
-//               ),
-//             ),
-//           ],
-//         )
-//       ],
-//     );
-//   } else if (level == '1') {
-//     // sufficiency
-//     return Column(
-//       children: [
-//         LinearPercentIndicator(
-//           lineHeight: 10.0,
-//           percent: 0.6,
-//           progressColor: Colors.green,
-//         ),
-//         SizedBox(height: getProportionateScreenHeight(5)),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               'Deficiency',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kGreyColor,
-//               ),
-//             ),
-//             Text(
-//               'Sufficiency',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kDarkColor,
-//               ),
-//             ),
-//             Text(
-//               'Overnutrition',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kGreyColor,
-//               ),
-//             ),
-//           ],
-//         )
-//       ],
-//     );
-//   } else {
-//     return Column(
-//       children: [
-//         LinearPercentIndicator(
-//           lineHeight: 10.0,
-//           percent: 0.8,
-//           progressColor: Colors.red,
-//         ),
-//         SizedBox(height: getProportionateScreenHeight(5)),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text(
-//               'Deficiency',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kGreyColor,
-//               ),
-//             ),
-//             Text(
-//               'Sufficiency',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kGreyColor,
-//               ),
-//             ),
-//             Text(
-//               'Overnutrition',
-//               style: TextStyle(
-//                 fontSize: ColourConstant.h6,
-//                 color: ColourConstant.kDarkColor,
-//               ),
-//             ),
-//           ],
-//         )
-//       ],
-//     );
-//   }
-// }
 
 Future<Daily_summary> retrieveDailySummary() async {
   // final int id = _read(authControllerProvider).id!;
@@ -250,7 +144,7 @@ Future<Daily_summary> retrieveDailySummary() async {
     );
 
     print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
+    print('Response body: ${response.body}');
 
     var responseBody = response.body;
     if (response.statusCode == 200) {
@@ -259,15 +153,20 @@ Future<Daily_summary> retrieveDailySummary() async {
       //     List<Map<String, dynamic>>.from(json.decode(responseBody));
 
       final results = json.decode(responseBody);
+       print("temp ${ results['carb_val']}");
+
       Daily_summary temp = Daily_summary(
-          carb_val: results['carb_val'],
+          carb_val: results['carb_val'].toDouble() as double,
           carb_level: results['carb_level'],
-          protein_val: results['protein_val'],
+          protein_val: results['protein_val'].toDouble() as double,
           protein_level: results['protein_level'],
-          sodium_val: results['sodium_val'],
+          sodium_val: results['sodium_val'].toDouble() as double,
           sodium_level: results['sodium_level'],
-          calcium_val: results['calcium_val'],
-          calcium_level: results['calcium_level']);
+          calcium_val: results['calcium_val'].toDouble() as double,
+          calcium_level: results['calcium_level']
+          );
+
+      print("temp ${temp}");
 
       return temp;
     } else {

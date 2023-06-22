@@ -16,16 +16,19 @@ class GroceryListScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        backgroundColor: ColourConstant.kLightBlueColor,
+        backgroundColor: ColourConstant.kWhiteColor,
         appBar: AppBar(
-          title: Text(
-            "",
-            style: TextStyle(
-              color: ColourConstant.kWhiteColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // title: Text(
+          //   "",
+          //   style: TextStyle(
+          //     color: ColourConstant.kDarkColor,
+          //     fontSize: 20,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+          foregroundColor: ColourConstant.kDarkColor,
+          backgroundColor: ColourConstant.kWhiteColor,
+          elevation: 0,
         ),
         extendBodyBehindAppBar: true,
         body: SafeArea(child: LayoutBuilder(builder: (context, constraint) {
@@ -33,12 +36,19 @@ class GroceryListScreen extends HookConsumerWidget {
             child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 20),
+                padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 30),
                 child: Container(
                     decoration: BoxDecoration(
+                      // gradient: ColourConstant.kPrimaryGradientColor,
                       color: ColourConstant.kWhiteColor,
+                      border: Border.all(
+                        color: ColourConstant.kBlueColor,
+                        width: 5,
+                      ),
                       borderRadius: BorderRadius.all(
-                           Radius.circular(20)),
+                        Radius.circular(20),
+                      ),
+                      
                     ),
                     width: double.infinity,
                     height: double.infinity,
@@ -52,7 +62,7 @@ class GroceryListScreen extends HookConsumerWidget {
                             return Center(
                                 child: CircularProgressIndicator(
                               // backgroundColor: ColourConstant.kWhiteColor,
-                              color: ColourConstant.kDarkColor,
+                              color: ColourConstant.kWhiteColor,
                             ));
                           } else {
                             if (!snapshot.hasData) {
@@ -71,11 +81,20 @@ class GroceryListScreen extends HookConsumerWidget {
                                     SizedBox(
                                       height: getProportionateScreenHeight(20),
                                     ),
-                                    Text("Your Grocery List ",
-                                        style: textTheme().bodyLarge),
+                                    Text(
+                                      "Your Grocery List ",
+                                      style: TextStyle(
+                                        color: ColourConstant.kDarkColor,
+                                        fontSize: ColourConstant.h1,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                     Text(
                                       "For ${DateFormat('dd-MMMM-yyyy').format(DateTime.now())}",
-                                      style: textTheme().bodySmall,
+                                      style: TextStyle(
+                                        color: ColourConstant.kDarkColor,
+                                        fontSize: ColourConstant.h5,
+                                      ),
                                     ),
                                     Expanded(
                                       child: ListView.builder(
@@ -84,15 +103,33 @@ class GroceryListScreen extends HookConsumerWidget {
                                           // physics: NeverScrollableScrollPhysics(),
                                           scrollDirection: Axis.vertical,
                                           primary: false,
-                                          itemBuilder:
-                                              (BuildContext context, int index) {
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
                                             return Row(
                                               children: [
                                                 CheckboxExample(),
-                                                Text(snapshot.data[index].amount),
-                                                Text(" ${snapshot.data[index].measure_name} of "),
-                                                Text(snapshot.data[index]
-                                                    .ingredients_name),
+                                                Text(
+                                                  snapshot.data[index].amount,
+                                                  style: TextStyle(
+                                                    color: ColourConstant
+                                                        .kDarkColor,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  " ${snapshot.data[index].measure_name} of ",
+                                                  style: TextStyle(
+                                                    color: ColourConstant
+                                                        .kDarkColor,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  snapshot.data[index]
+                                                      .ingredients_name,
+                                                  style: TextStyle(
+                                                    color: ColourConstant
+                                                        .kDarkColor,
+                                                  ),
+                                                ),
                                               ],
                                             );
                                           }),

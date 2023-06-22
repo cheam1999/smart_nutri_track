@@ -82,6 +82,7 @@ class Nutrient_status extends StatelessWidget {
                   'Deficiency',
                   style: TextStyle(
                     fontSize: ColourConstant.h6,
+                    fontWeight: FontWeight.bold,
                     color: ColourConstant.kDarkColor,
                   ),
                 ),
@@ -90,6 +91,7 @@ class Nutrient_status extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ColourConstant.h6,
                     color: ColourConstant.kGreyColor,
+                    
                   ),
                 ),
               ],
@@ -121,6 +123,7 @@ class Nutrient_status extends StatelessWidget {
                   style: TextStyle(
                     fontSize: ColourConstant.h6,
                     color: ColourConstant.kDarkColor,
+                    fontWeight: FontWeight.bold
                   ),
                 ),
               ],
@@ -137,6 +140,7 @@ class Nutrient_status extends StatelessWidget {
         'Deficiency',
         style: TextStyle(
           fontSize: ColourConstant.h6,
+          fontWeight: def ? FontWeight.bold:FontWeight.normal,
           color: def ? ColourConstant.kDarkColor : ColourConstant.kGreyColor,
         ),
       ),
@@ -144,6 +148,7 @@ class Nutrient_status extends StatelessWidget {
         'Sufficiency',
         style: TextStyle(
           fontSize: ColourConstant.h6,
+          fontWeight: suf ? FontWeight.bold:FontWeight.normal,
           color: suf ? ColourConstant.kDarkColor : ColourConstant.kGreyColor,
         ),
       ),
@@ -151,6 +156,7 @@ class Nutrient_status extends StatelessWidget {
         'Overnutrition',
         style: TextStyle(
           fontSize: ColourConstant.h6,
+          fontWeight: over ? FontWeight.bold:FontWeight.normal,
           color: over ? ColourConstant.kDarkColor : ColourConstant.kGreyColor,
         ),
       ),

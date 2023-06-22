@@ -18,16 +18,16 @@ class SignUpScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          // fontWeight: FontWeight.bold,
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   titleTextStyle: TextStyle(
+      //     color: Colors.white,
+      //     fontSize: 20,
+      //     // fontWeight: FontWeight.bold,
+      //   ),
+      //   centerTitle: true,
+      //   backgroundColor: Colors.white,
+      // ),
       body: SafeArea(
         child: SizedBox(
           width: double.infinity,
@@ -37,7 +37,7 @@ class SignUpScreen extends HookConsumerWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 30),
+                  SizedBox(height: getProportionateScreenHeight(80)),
                   Text(
                     "Sign Up",
                     style: TextStyle(

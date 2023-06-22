@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smart_nutri_track">
    <application
-        android:label="smart_nutri_track"
+        android:label="SmartNutriTrack - for Pregnant Women"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

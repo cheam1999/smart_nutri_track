@@ -1,153 +1,3 @@
-// import 'dart:io';
-
-// import 'package:flutter/material.dart';
-// import 'package:google_mlkit_image_labeling/google_mlkit_image_labeling.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:smart_nutri_track/controller/photo_scanning_controller.dart';
-
-// class PhotoScanning extends HookConsumerWidget {
-//   static String routeName = "/photoScanning";
-
-//   const PhotoScanning({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return Scaffold(
-//       // backgroundColor: ColourConstant.kBlueColor,
-//       extendBodyBehindAppBar: true,
-//       body: _PhotoScanningState(),
-//     );
-//   }
-// }
-
-// class _PhotoScanningState extends HookConsumerWidget {
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     bool imageLabelChecking =
-//         ref.watch(photoScanningControllerProvider).imageLabelChecking;
-
-//     XFile? imageFile = ref.watch(photoScanningControllerProvider).imageFile;
-
-//     String imageLabel = ref.watch(photoScanningControllerProvider).imageLabel;
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: const Text("Image Label example"),
-//       ),
-//       body: Center(
-//           child: SingleChildScrollView(
-//         child: Container(
-//             margin: const EdgeInsets.all(20),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 if (imageLabelChecking) const CircularProgressIndicator(),
-//                 if (!imageLabelChecking && imageFile == null)
-//                   Container(
-//                     width: 300,
-//                     height: 300,
-//                     color: Colors.grey[300]!,
-//                   ),
-//                 if (imageFile != null)
-//                   Image.file(
-//                     File(imageFile!.path),
-//                   ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Container(
-//                         margin: const EdgeInsets.symmetric(horizontal: 5),
-//                         padding: const EdgeInsets.symmetric(vertical: 20),
-//                         child: ElevatedButton(
-//                           style: ElevatedButton.styleFrom(
-//                             primary: Colors.white,
-//                             onPrimary: Colors.grey,
-//                             shadowColor: Colors.grey[400],
-//                             elevation: 10,
-//                             shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(8.0)),
-//                           ),
-//                           onPressed: () {
-//                             ref
-//                                 .watch(photoScanningControllerProvider)
-//                                 .getImage(ImageSource.gallery);
-//                           },
-//                           child: Container(
-//                             margin: const EdgeInsets.symmetric(
-//                                 vertical: 5, horizontal: 5),
-//                             child: Column(
-//                               mainAxisSize: MainAxisSize.min,
-//                               children: const [
-//                                 Icon(
-//                                   Icons.image,
-//                                   size: 30,
-//                                   color: Colors.red,
-//                                 ),
-//                                 Text(
-//                                   "Gallery",
-//                                   style: TextStyle(
-//                                       fontSize: 13,
-//                                       color: Colors.green,
-//                                       fontWeight: FontWeight.bold),
-//                                 )
-//                               ],
-//                             ),
-//                           ),
-//                         )),
-//                     Container(
-//                         margin: const EdgeInsets.symmetric(horizontal: 5),
-//                         padding: const EdgeInsets.symmetric(vertical: 20),
-//                         child: ElevatedButton(
-//                           style: ElevatedButton.styleFrom(
-//                             primary: Colors.white,
-//                             onPrimary: Colors.grey,
-//                             shadowColor: Colors.grey[400],
-//                             elevation: 10,
-//                             shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(8.0)),
-//                           ),
-//                           onPressed: () {
-//                             ref.watch(photoScanningControllerProvider).getImage(ImageSource.camera);
-//                           },
-//                           child: Container(
-//                             margin: const EdgeInsets.symmetric(
-//                                 vertical: 5, horizontal: 5),
-//                             child: Column(
-//                               mainAxisSize: MainAxisSize.min,
-//                               children: const [
-//                                 Icon(
-//                                   Icons.camera_alt,
-//                                   size: 30,
-//                                   color: Colors.red,
-//                                 ),
-//                                 Text(
-//                                   "Camera",
-//                                   style: TextStyle(
-//                                       fontSize: 13,
-//                                       color: Colors.green,
-//                                       fontWeight: FontWeight.bold),
-//                                 )
-//                               ],
-//                             ),
-//                           ),
-//                         )),
-//                   ],
-//                 ),
-//                 const SizedBox(
-//                   height: 20,
-//                 ),
-//                 Text(
-//                   imageLabel,
-//                   style: const TextStyle(fontSize: 20),
-//                 )
-//               ],
-//             )),
-//       )),
-//     );
-//   }
-// }
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -341,26 +191,28 @@ class _PlantRecogniserState extends State<PlantRecogniser> {
 
     return Column(
       children: [
-        Text(
-          "Food Name: $title",
-        ),
+        if (title != "")
+          Text(
+            "Food Name: $title",
+          ),
         const SizedBox(height: 10),
         Text(
           accuracyLabel,
         ),
         SizedBox(height: getProportionateScreenHeight(20)),
-        DefaultButton(
-          text: "Search food",
-          press: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddMealScreen(
-                    foodName: title,
-                  ),
-                ));
-          },
-        )
+        if (title != "")
+          DefaultButton(
+            text: "Search food",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddMealScreen(
+                      foodName: title,
+                    ),
+                  ));
+            },
+          )
       ],
     );
   }

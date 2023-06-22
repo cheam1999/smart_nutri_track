@@ -163,46 +163,45 @@ class _CameraViewState extends State<CameraView> {
               size: 200,
             ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('From Gallery'),
-          onPressed: () => _getImage(ImageSource.gallery),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('Take a picture'),
-          onPressed: () {
-            _getImage(ImageSource.camera);
-
-            // await Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => BarcodeDetailScreen(code: widget.code),
-            //     ));
-          },
-        ),
-      ),
-      // if (_image != nullDefaultButton)
-      //   Padding(
-      //     padding: const EdgeInsets.all(16.0),
-      //     child: Text(
-      //         '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
-      //   ),
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: DefaultButton(
+            text: "From gallery",
+            press: () {
+              _getImage(ImageSource.gallery);
+            },
+          )),
       SizedBox(height: getProportionateScreenHeight(20)),
-      DefaultButton(
-        text: "Search food",
-        press: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BarcodeDetailScreen(
-                  code: _codeVal,
-                ),
-              ));
-        },
-      )
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: DefaultButton(
+            text: "Take a picture",
+            press: () {
+              _getImage(ImageSource.camera);
+            },
+          )),
+      SizedBox(height: getProportionateScreenHeight(20)),
+      if (_codeVal != "")
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text("Barcode value : $_codeVal"),
+        ),
+      SizedBox(height: getProportionateScreenHeight(20)),
+      if (_codeVal != "")
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: DefaultButton(
+            text: "Search food",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BarcodeDetailScreen(
+                      code: _codeVal,
+                    ),
+                  ));
+            },
+          ),
+        )
     ]);
   }
 
@@ -351,21 +350,13 @@ class _CameraViewState extends State<CameraView> {
         code = barcode.rawValue!;
       }
 
-      if (code == null) {
+      if (code == "") {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('NO BARCODE DETECTED! PLEASE TRY AGAIN!')));
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: const Text('Code detected')));
-        showLoadingDialog(context: context);
-        _setCodeVal(code);
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => BarcodeDetailScreen(
-        //         code: code,
-        //       ),
-        //     ));
+        _setCodeVal(code!);
       }
 
       // TODO: set _customPaint to draw boundingRect on top of image

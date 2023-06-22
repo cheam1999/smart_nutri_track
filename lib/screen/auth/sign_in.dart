@@ -21,16 +21,16 @@ class SignInScreen extends HookConsumerWidget {
     final authControllerState = ref.watch(authControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          // fontWeight: FontWeight.bold,
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   titleTextStyle: TextStyle(
+      //     // color: Colors.white,
+      //     fontSize: 20,
+      //     // fontWeight: FontWeight.bold,
+      //   ),
+      //   centerTitle: true,
+      //   backgroundColor: Colors.white,
+      // ),
       body: SafeArea(
         child: SizedBox.expand(
           child: Container(
@@ -42,7 +42,7 @@ class SignInScreen extends HookConsumerWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(height: 30),
+                      SizedBox(height: getProportionateScreenHeight(80)),
                       Text(
                         "Welcome!",
                         style: TextStyle(

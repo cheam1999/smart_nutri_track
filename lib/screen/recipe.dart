@@ -52,7 +52,6 @@ class RecipeScreen extends HookConsumerWidget {
               constraints: BoxConstraints.expand(),
               decoration: BoxDecoration(
                 color: ColourConstant.kWhiteColor,
-
               ),
               child: Container(
                   // decoration: BoxDecoration(color: ColourConstant.kWhiteColor,borderRadius: BorderRadius.only(

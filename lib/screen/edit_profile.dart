@@ -126,7 +126,7 @@ class ProfileDetail extends HookConsumerWidget {
                   if ("${updateProfileControllerState.email.value}" == 'null') {
                     ref.read(updateProfileController).initialEmail(
                         updateProfileControllerState.getInitialEmail);
-                  }
+                  } 
 
                   final bool isSuccess =
                       await ref.read(updateProfileController).submitData();
@@ -134,11 +134,11 @@ class ProfileDetail extends HookConsumerWidget {
                   if (isSuccess) {
                     final bool isUpdated =
                         await ref.read(updateProfileController).updateUser();
-                    
 
-                    if (isUpdated) Navigator.of(context).popAndPushNamed(
-                      HomeScreen.routeName,
-                    );
+                    if (isUpdated)
+                      Navigator.of(context).popAndPushNamed(
+                        HomeScreen.routeName,
+                      );
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

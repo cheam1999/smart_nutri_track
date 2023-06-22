@@ -5,7 +5,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:smart_nutri_track/models/weekly_intake.dart';
+import 'package:smart_nutri_track/screen/diary_diabetes.dart';
 import 'package:smart_nutri_track/theme.dart';
+import '../component/default_button.dart';
 import '../component/nutrient_status.dart';
 import '../env.dart';
 import '../models/custom_exception.dart';
@@ -30,7 +32,7 @@ class WeeklyDiary extends HookConsumerWidget {
                     future: retrieveWeeklySummary(),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState != ConnectionState.done) {
-                        return Center(
+                        return const Center(
                             child: CircularProgressIndicator(
                           // backgroundColor: ColourConstant.kWhiteColor,
                           color: ColourConstant.kDarkColor,
@@ -110,7 +112,10 @@ class WeeklyDiary extends HookConsumerWidget {
                                       Nutrient_status(
                                         level: snapshot.data.carb_level,
                                         display_calcium: false,
-                                        percentage: snapshot.data.carb_val / 90,
+                                        percentage:
+                                            snapshot.data.carb_val / 100 >= 1
+                                                ? 1
+                                                : snapshot.data.carb_val / 100,
                                       ),
                                       SizedBox(
                                           height:
@@ -134,7 +139,11 @@ class WeeklyDiary extends HookConsumerWidget {
                                           level: snapshot.data.protein_level,
                                           display_calcium: false,
                                           percentage:
-                                              snapshot.data.protein_val / 150),
+                                              snapshot.data.protein_val / 62 >=
+                                                      1
+                                                  ? 1
+                                                  : snapshot.data.protein_val /
+                                                      62),
                                       SizedBox(
                                           height:
                                               getProportionateScreenHeight(25)),
@@ -157,7 +166,9 @@ class WeeklyDiary extends HookConsumerWidget {
                                         level: snapshot.data.sodium_level,
                                         display_calcium: false,
                                         percentage:
-                                            snapshot.data.sodium_val / 9,
+                                            snapshot.data.sodium_val / 9 >= 1
+                                                ? 1
+                                                : snapshot.data.sodium_val / 9,
                                       ),
                                       SizedBox(
                                           height:
@@ -181,72 +192,98 @@ class WeeklyDiary extends HookConsumerWidget {
                                         level: snapshot.data.calcium_level,
                                         display_calcium: true,
                                         percentage:
-                                            snapshot.data.calcium_val / 5,
+                                            snapshot.data.calcium_val / 2 >=1
+                                                ? 1
+                                                : snapshot.data.calcium_val / 2,
                                       ),
                                       SizedBox(
                                           height:
                                               getProportionateScreenHeight(20)),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: ColourConstant.kPinkColor
-                                              .withOpacity(0.9),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                        margin: EdgeInsets.only(top: 20),
-                                        padding: EdgeInsets.all(30),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              "Your Diabetes Prediction Result",
-                                              style: textTheme().bodyMedium,
-                                            ),
-                                            SizedBox(height: getProportionateScreenHeight(5),),
-                                            FutureBuilder(
-                                                future:
-                                                    retrieveDiabetesPrediction(
-                                                        snapshot.data.sodium_val
-                                                            .toStringAsFixed(
-                                                                2)),
-                                                builder: (context,
-                                                    AsyncSnapshot snapshot) {
-                                                  if (snapshot
-                                                          .connectionState !=
-                                                      ConnectionState.done) {
-                                                    return Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                      // backgroundColor: ColourConstant.kWhiteColor,
-                                                      color: ColourConstant
-                                                          .kDarkColor,
-                                                    ));
-                                                  } else {
-                                                    if (!snapshot.hasData) {
-                                                      return Center(
-                                                        child: Text(
-                                                          "",
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      return Center(
-                                                        child: snapshot.data
-                                                            ? Text(
-                                                                'Hooray! You are free from gestational diabetes.',
-                                                                textAlign: TextAlign.center,
-                                                                )
-                                                            : Text(
-                                                                'You suspect gestational diabetes! We suggest you have a medical check-up.',
-                                                                textAlign: TextAlign.center,),
-                                                      );
-                                                    }
-                                                  }
-                                                }),
-                                          ],
-                                        ),
-                                      )
+                                      DefaultButton(
+                                        text: "Check Gestational Diabetes",
+                                        press: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DiabetesScreen(
+                                                  carbVal: snapshot
+                                                      .data.carb_val
+                                                      .toStringAsFixed(2),
+                                                ),
+                                              ));
+                                        },
+                                      ),
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //     color: ColourConstant.kPinkColor
+                                      //         .withOpacity(0.9),
+                                      //     borderRadius: BorderRadius.all(
+                                      //         Radius.circular(30)),
+                                      //   ),
+                                      //   margin: EdgeInsets.only(top: 20),
+                                      //   padding: EdgeInsets.all(30),
+                                      //   child: Column(
+                                      //     children: [
+                                      //       Text(
+                                      //         "Your Diabetes Prediction Result",
+                                      //         style: textTheme().bodyMedium,
+                                      //       ),
+                                      //       SizedBox(
+                                      //         height:
+                                      //             getProportionateScreenHeight(
+                                      //                 5),
+                                      //       ),
+                                      // FutureBuilder(
+                                      //     future:
+                                      //         retrieveDiabetesPrediction(
+                                      //             snapshot.data.sodium_val
+                                      //                 .toStringAsFixed(
+                                      //                     2)),
+                                      //     builder: (context,
+                                      //         AsyncSnapshot snapshot) {
+                                      //       if (snapshot
+                                      //               .connectionState !=
+                                      //           ConnectionState.done) {
+                                      //         return Center(
+                                      //             child:
+                                      //                 CircularProgressIndicator(
+                                      //           // backgroundColor: ColourConstant.kWhiteColor,
+                                      //           color: ColourConstant
+                                      //               .kDarkColor,
+                                      //         ));
+                                      //       } else {
+                                      //         if (!snapshot.hasData) {
+                                      //           return Center(
+                                      //             child: Text(
+                                      //               "",
+                                      //               style: TextStyle(
+                                      //                 fontSize: 14,
+                                      //               ),
+                                      //             ),
+                                      //           );
+                                      //         } else {
+                                      //           return Center(
+                                      //             child: snapshot.data
+                                      //                 ? Text(
+                                      //                     'Hooray! You are free from gestational diabetes.',
+                                      //                     textAlign:
+                                      //                         TextAlign
+                                      //                             .center,
+                                      //                   )
+                                      //                 : Text(
+                                      //                     'You suspect gestational diabetes! We suggest you have a medical check-up.',
+                                      //                     textAlign:
+                                      //                         TextAlign
+                                      //                             .center,
+                                      //                   ),
+                                      //           );
+                                      //         }
+                                      //       }
+                                      //     }),
+                                      //     ],
+                                      //   ),
+                                      // )
                                     ],
                                   )));
                         }
@@ -294,13 +331,13 @@ class WeeklyDiary extends HookConsumerWidget {
             .subtract(const Duration(days: 7));
 
         Weekly_summary temp = Weekly_summary(
-            carb_val: results['carb_val'],
+            carb_val: results['carb_val'].toDouble() as double,
             carb_level: results['carb_level'],
-            protein_val: results['protein_val'],
+            protein_val: results['protein_val'].toDouble() as double,
             protein_level: results['protein_level'],
-            sodium_val: results['sodium_val'],
+            sodium_val: results['sodium_val'].toDouble() as double,
             sodium_level: results['sodium_level'],
-            calcium_val: results['calcium_val'],
+            calcium_val: results['calcium_val'].toDouble() as double,
             calcium_level: results['calcium_level'],
             score: results['score'],
             sun_date: (DateTime.parse(results['sun_date'])),

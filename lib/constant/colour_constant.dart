@@ -8,8 +8,8 @@ class ColourConstant {
     begin: Alignment.topCenter,
     end: Alignment(0.8, 1),
     colors: <Color>[
-      Color(0xFF58BFF2),
-      Color(0xFF033F6D),
+      Color(0xFF004e92),
+      Color(0xFF000428),
     ],
   );
   static const Color kButtonColor = Color(0xFF52ABE1);
@@ -23,7 +23,7 @@ class ColourConstant {
   static const LinearGradient kPrimaryGradientColor = const LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.topRight,
-    colors: [Color(0xFF0F1BE8), Color(0xFF3DAEF7)],
+    colors: [Color(0xFF115CB9), Color(0xFF11B3E2)],
   );
 
   static double h1 = getProportionateScreenHeight(25);
