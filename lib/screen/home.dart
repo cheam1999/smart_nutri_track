@@ -465,7 +465,7 @@ class MealCard extends HookConsumerWidget {
                 ),
               ),
               Text(
-                "$size g/ml",
+                "$size g/ml/unit",
                 style: TextStyle(
                     fontSize: ColourConstant.h5,
                     color: ColourConstant.kDarkColor),

@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:smart_nutri_track/constant/colour_constant.dart';
 import 'package:smart_nutri_track/screen/home.dart';
 import 'package:smart_nutri_track/theme.dart';
-
+import 'package:smart_nutri_track/screen/init.dart';
 import '../../size_config.dart';
 import '../component/default_button.dart';
 import '../controller/auth_controller.dart';
@@ -126,7 +126,7 @@ class ProfileDetail extends HookConsumerWidget {
                   if ("${updateProfileControllerState.email.value}" == 'null') {
                     ref.read(updateProfileController).initialEmail(
                         updateProfileControllerState.getInitialEmail);
-                  } 
+                  }
 
                   final bool isSuccess =
                       await ref.read(updateProfileController).submitData();
@@ -136,8 +136,10 @@ class ProfileDetail extends HookConsumerWidget {
                         await ref.read(updateProfileController).updateUser();
 
                     if (isUpdated)
-                      Navigator.of(context).popAndPushNamed(
-                        HomeScreen.routeName,
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        InitScreen.routeName,
+                        ModalRoute.withName('/'),
                       );
                   }
                 } else {

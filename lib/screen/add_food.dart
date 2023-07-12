@@ -353,20 +353,20 @@ class AddFoodScreen extends HookConsumerWidget {
                             ),
                             SizedBox(height: getProportionateScreenHeight(30)),
                             DefaultButton(
-                                text: "Add meal",
+                                text: "Add food",
                                 press: () async {
                                   print('buttonn clicked');
                                   final bool success = await ref
                                       .read(addFoodControllerProvider)
                                       .saveFood();
 
-                                  // if (success) {
-                                  //   Navigator.pushNamedAndRemoveUntil(
-                                  //     context,
-                                  //     InitScreen.routeName,
-                                  //     ModalRoute.withName('/'),
-                                  //   );
-                                  // }
+                                  if (success) {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      InitScreen.routeName,
+                                      ModalRoute.withName('/'),
+                                    );
+                                  }
                                 }),
                             SizedBox(height: getProportionateScreenHeight(20)),
                             DefaultButton(
